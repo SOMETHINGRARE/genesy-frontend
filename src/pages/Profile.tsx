@@ -79,7 +79,8 @@ const Profile = () => {
         setTabLength(1);
         if (
           _activeAddress?.address == "tz1VL5AfvZ3Cz6Bd2c2agcUQe7HKxje7ojNu" ||
-          _activeAddress?.address == "tz1MNjp6JCY68XqCkPU1quEwh67LCT3LkHwP"
+          _activeAddress?.address == "tz1MNjp6JCY68XqCkPU1quEwh67LCT3LkHwP" ||
+          _activeAddress?.address == "tz1cVm8jzr5MN6oH21p54HuWCi69qYzjo7MN"
         ) {
           setTabLength(0);
         }
