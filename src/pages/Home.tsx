@@ -28,8 +28,7 @@ const Home = () => {
   return (
     <div className="max-w-[1024px] mx-auto py-16 sm:px-8 lg:px-0">
       <div className="w-3/5 flex flex-col gap-5">
-        <div className="uppercase font-bold text-2xl">something rare</div>
-        <div>Collect and Create Unique Digital Art on Tezos</div>
+        <div className="text-2xl">Collect and Create Rare Digital Art on Tezos</div>
       </div>
       <div className=" pb-2 mt-24">
         <div className="flex border-b-2 border-black">

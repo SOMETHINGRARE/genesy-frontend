@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import Edit from "./pages/Edit";
 import Mint from "./pages/Mint";
 import Faq from "./pages/Faq";
+import Term from "./pages/Term";
 import { useTheme } from "./context";
 import { useTezosCollectStore } from "./store";
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/edit" element={<Edit />} />
           <Route path="/assets/:tokenId" element={<Asset />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/term" element={<Term />} />
           <Route path="/mint" element={<Mint />} />
           <Route path="/profile/:address/*" element={<Profile />} />
         </Routes>

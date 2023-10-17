@@ -1,6 +1,7 @@
 import ConnectWallet from "./ConnectWallet";
 // import { useTheme } from "../../context";
 import LinkWithSearchParams from "../LinkWithSearchParams";
+import navBarLogo from "../../assets/navbar_logo.svg";
 const Navbar = () => {
   // const { theme, setTheme } = useTheme();
   return (
@@ -10,7 +11,7 @@ const Navbar = () => {
           pathname: "/",
         }}
       >
-        <div className="text-3xl border-r-8 border-black pr-4 ">GENESY</div>
+       <img width="220" height="100" src={navBarLogo} alt="Somethingrare Logo"></img>
       </LinkWithSearchParams>
       <div className="">
         {/* <button className="rounded-full text-3xl h-12 w-12 hover:bg-gray-200 flex justify-center items-center">
