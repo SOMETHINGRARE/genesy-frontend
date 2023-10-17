@@ -25,7 +25,7 @@ export const NFT_STORAGE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDIxM2MwOGZEQjVCMDNGQWRkYzVEYWE1ODk5ZkY4NjY5YWE2ZGZBRDAiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MDUwODU3OTgwNCwibmFtZSI6IkdlbmVzeSJ9.ZTjxdK3K9Rr14USOXMCcrOkvBCuyVi6MKlI7Uhv4ufg";
 // Create a new DAppClient instance
 export const TEZOS_COLLECT_WALLET = new BeaconWallet({
-  name: "Genesy",
+  name: "SomethingRare",
   preferredNetwork: TEZOS_COLLECT_NETWORK.type,
   colorMode: ColorMode.LIGHT,
 });

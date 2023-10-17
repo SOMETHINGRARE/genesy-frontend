@@ -57,7 +57,7 @@ const SignUp = () => {
   return (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
       <div className="w-96 flex flex-col">
-        <div className="text-3xl">Create a Genesy account</div>
+        <div className="text-3xl">Create a SomethingRare account</div>
         <div className="py-6">
           You are almost there... Enter the information related to your account.
           You can always edit it later.
