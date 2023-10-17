@@ -74,4 +74,4 @@ export const NFT_CONTRACT_ADDRESS = NFT_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 //     ? "http://localhost:80"
 //     : "https://api.genesy.xyz";
 
-export const API_ENDPOINT = "https://api.genesy.xyz";
+export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";
