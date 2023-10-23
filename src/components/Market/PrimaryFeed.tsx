@@ -14,7 +14,7 @@ interface propsType {
 
 const SortBoard = (props: propsType) => {
   return (
-    <div className="absolute top-8 bg-white  w-32 right-0 menu-shadow ">
+    <div className="absolute top-8 bg-white  w-36 right-0 menu-shadow ">
       <div
         className={`${
           props.orderBy == 0 ? "bg-gray-200" : ""
@@ -35,7 +35,7 @@ const SortBoard = (props: propsType) => {
           props.setIsControl(false);
         }}
       >
-        Curated
+        Under Radar
       </div>
     </div>
   );
@@ -44,7 +44,7 @@ const SortBoard = (props: propsType) => {
 const PrimaryFeed = () => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { findProfileById, profile, profileReady } = useTezosCollectStore();
+  const { activeAddress, findProfileById, profile, profileReady } = useTezosCollectStore();
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (ref.current && !ref.current.contains(event.target)) {
@@ -59,11 +59,31 @@ const PrimaryFeed = () => {
   const [orderBy, setOrderBy] = useState<number>(profile.feedOrder);
   const [currentPage, setCurrentPage] = useState<number | null>(null);
   const [hasMoreItems, setHasMoreItems] = useState<boolean>(true);
+
   useEffect(() => {
     const fetchItem = async () => {
-      const { data: _nftItems }: { data: I_NFT[] } = await axios.get(
-        `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5`
-      );
+      let _nftItems: I_NFT[] = []; 
+      let _friends: [] = [];
+      if(orderBy === 0) {
+        _nftItems = await (await axios.get(
+          `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5`
+        )).data;
+        console.log(_nftItems)
+      } else {
+        _friends = (await axios.get(`${API_ENDPOINT}/profiles/friends/${activeAddress}`)).data;
+        console.log(_friends)
+        if (_friends.length > 0) {
+          setFriends([..._friends]);
+        }
+        // Join the elements of the 'friends' array into a single string separated by commas
+        const friendsQuery = friends.length > 1  ? friends.join(',') : friends[0];
+        console.log(`${API_ENDPOINT}/nfts/primary/${orderBy}/0/5?owner=${friendsQuery}`)
+        _nftItems = await (await axios.get(
+          `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5?owner=${friendsQuery}`
+        )).data;
+        console.log(_nftItems)
+      }
+
       setNftItems(_nftItems);
       setCurrentPage(0);
       if (_nftItems.length == 0) {
@@ -93,6 +113,7 @@ const PrimaryFeed = () => {
 
   const [nftItems, setNftItems] = useState<I_NFT[]>([]);
   const [isControl, setIsControl] = useState<boolean>(false);
+  const [friends, setFriends] = useState<string[]>([]);
 
   return (
     <div>
