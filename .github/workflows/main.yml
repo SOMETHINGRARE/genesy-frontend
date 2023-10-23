@@ -22,4 +22,4 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@ec2-3-85-208-85.compute-1.amazonaws.com 'cd /var/www/staging-frontend && git pull origin feat/staging && npm run build'
+          ssh -v -i ~/.ssh/id_rsa ubuntu@ec2-3-85-208-85.compute-1.amazonaws.com 'cd /var/www/staging-frontend && git pull origin feat/staging && npm run build'
