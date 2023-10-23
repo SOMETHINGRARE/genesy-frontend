@@ -200,10 +200,12 @@ const Asset = () => {
         `${API_ENDPOINT}/nfts/${tokenId}`
       );
       console.log("_nftItems", _nftItems);
-      let peer = await axios.get(
-        `${API_ENDPOINT}/nfts/peers/${_nftItems?.artist}/${activeAddress}`
-      );
-      setPeers(peer.data);
+      if(activeAddress) {
+        let peer = await axios.get(
+          `${API_ENDPOINT}/nfts/peers/${_nftItems?.artist}/${activeAddress}`
+        );
+        setPeers(peer.data);
+      }
       let res = await axios.get(`${API_ENDPOINT}/nfts/log/${tokenId}`);
       setLogs(res.data?.reverse());
       let _price = await getTezosPrice();

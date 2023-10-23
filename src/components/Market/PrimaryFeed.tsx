@@ -13,6 +13,7 @@ interface propsType {
 }
 
 const SortBoard = (props: propsType) => {
+  const { activeAddress } = useTezosCollectStore();
   return (
     <div className="absolute top-8 bg-white  w-36 right-0 menu-shadow ">
       <div
@@ -26,17 +27,19 @@ const SortBoard = (props: propsType) => {
       >
         Chronogical
       </div>
-      <div
-        className={`${
-          props.orderBy == 1 ? "bg-gray-200" : ""
-        } px-4 py-2 hover:bg-gray-300`}
-        onClick={() => {
-          props.setOrderBy(1);
-          props.setIsControl(false);
-        }}
-      >
-        Under Radar
-      </div>
+      {activeAddress && (
+        <div
+          className={`${
+            props.orderBy === 1 ? "bg-gray-200" : ""
+          } px-4 py-2 hover:bg-gray-300`}
+          onClick={() => {
+            props.setOrderBy(1);
+            props.setIsControl(false);
+          }}
+        >
+          Under Radar
+        </div>
+      )}
     </div>
   );
 };
@@ -63,23 +66,14 @@ const PrimaryFeed = () => {
   useEffect(() => {
     const fetchItem = async () => {
       let _nftItems: I_NFT[] = []; 
-      let _friends: [] = [];
       if(orderBy === 0) {
         _nftItems = await (await axios.get(
           `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5`
         )).data;
         console.log(_nftItems)
       } else {
-        _friends = (await axios.get(`${API_ENDPOINT}/profiles/friends/${activeAddress}`)).data;
-        console.log(_friends)
-        if (_friends.length > 0) {
-          setFriends([..._friends]);
-        }
-        // Join the elements of the 'friends' array into a single string separated by commas
-        const friendsQuery = friends.length > 1  ? friends.join(',') : friends[0];
-        console.log(`${API_ENDPOINT}/nfts/primary/${orderBy}/0/5?owner=${friendsQuery}`)
         _nftItems = await (await axios.get(
-          `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5?owner=${friendsQuery}`
+          `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5/${activeAddress}`
         )).data;
         console.log(_nftItems)
       }
