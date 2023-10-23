@@ -2,17 +2,28 @@ name: Deploy Test Website
 
 on:
   push:
-    branches:
+    
+   
+branches:
       - feat/staging
 
 jobs:
-  deploy:
+  
+ 
+deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v2
 
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ec2-3-85-208-85.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/huydo1.pem ubuntu@ec2-3-85-208-85.compute-1.amazonaws.com 'cd /var/www/staging-frontend && git pull origin feat/staging'
+          ssh -i ~/.ssh/id_rsa ubuntu@ec2-3-85-208-85.compute-1.amazonaws.com 'cd /var/www/staging-frontend && git pull origin feat/staging && npm run build'
