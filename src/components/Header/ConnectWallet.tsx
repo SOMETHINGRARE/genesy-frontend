@@ -81,7 +81,7 @@ const ConnectWallet = () => {
 
   return activeAddress.length === 0 ? (
     <button
-      className="bg-black text-white text-xl px-4 hover:bg-gray-600 py-1"
+      className="bg-black text-white text-m px-4 hover:bg-gray-600 py-1"
       onClick={onConnectWallet}
     >
       Sync
