@@ -2,15 +2,11 @@ name: Deploy Test Website
 
 on:
   push:
-    
-   
-branches:
+    branches:
       - feat/staging
 
 jobs:
-  
- 
-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
