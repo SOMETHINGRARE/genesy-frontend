@@ -16,6 +16,8 @@ const Profile = () => {
   const { address } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [guest, setGuest] = useState<boolean>(true);
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const { fetchProfile, activeAddress, toggleBookmark } =
     useTezosCollectStore();
   const _activeAddress = JSON.parse(
@@ -140,9 +142,12 @@ const Profile = () => {
           </a>
         </div>
         {_activeAddress?.address !== address && (
+          <div className="flex"> 
           <div
             onClick={() => toggleMark(_activeAddress?.address!, address!)}
             className=" w-10 h-10 rounded-full hover:bg-gray-100 flex justify-center items-center"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
           >
             {isBookmark ? (
               <BsBookmarkFill className="font-bold" />
@@ -150,7 +155,18 @@ const Profile = () => {
               <BsBookmark className="font-bold" />
             )}
           </div>
+            {showTooltip && (
+            <div className="tooltip">
+              <div id="tooltip-default" role="tooltip" className="absolute text-[12px] bg-gray-200 w-40">
+                Use Flags to build your 'Under Radar' filter
+                <div className="tooltip-arrow" data-popper-arrow></div>
+              </div>
+            </div>
+          )}
+          </div>
+          
         )}
+        
       </div>
       {guest && (
         <div className="flex gap-4 pb-8">
