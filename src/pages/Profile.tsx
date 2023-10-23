@@ -157,7 +157,7 @@ const Profile = () => {
           </div>
             {showTooltip && (
             <div className="tooltip">
-              <div id="tooltip-default" role="tooltip" className="absolute text-[12px] bg-gray-200 w-40">
+              <div id="tooltip-default" role="tooltip" className="absolute text-[12px] bg-gray-200 w-40 p-2">
                 Use Flags to build your 'Under Radar' filter
                 <div className="tooltip-arrow" data-popper-arrow></div>
               </div>
