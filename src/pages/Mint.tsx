@@ -1,13 +1,12 @@
 import { BsImage } from "react-icons/bs";
 import { useState, ChangeEvent, useEffect } from "react";
-import { NFT_STORAGE_KEY } from "../utils/constants";
 import { NFTStorage, File } from "nft.storage";
 import { useTezosCollectStore } from "../store";
 import spinner from "../assets/spinner.svg";
 import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { I_NFT, I_Log, I_PROFILE } from "../utils/interface";
-import { replaceIpfsLink } from "../utils/utils";
+import { replaceIpfsLink, pinMetadataToIpfs } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 
 const Mint = () => {
@@ -19,7 +18,6 @@ const Mint = () => {
     updateLastTokenId,
     fetchProfile,
   } = useTezosCollectStore();
-  const client = new NFTStorage({ token: NFT_STORAGE_KEY });
   const [profile, setProfile] = useState<I_PROFILE | null>(null);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -45,7 +43,21 @@ const Mint = () => {
     setIsLoad(true);
     (async () => {
       try {
-        const metadata = await client.store({
+        // const metadata = await client.store({
+        //   name: name,
+        //   description: description,
+        //   image: new File([file!], file!.name, { type: file!.type }),
+        //   symbol: "GENESY",
+        //   decimals: 0,
+        //   shouldPreferSymbol: false,
+        //   isBooleanAmount: true,
+        //   istransferable: true,
+        //   artifactUri: new File([file!], file!.name, { type: file!.type }),
+        //   displayUri: new File([file!], file!.name, { type: file!.type }),
+        //   thumbnailUri: new File([file!], file!.name, { type: file!.type }),
+        //   creators: ["genesy"],
+        // });
+        const metadata = await pinMetadataToIpfs({
           name: name,
           description: description,
           image: new File([file!], file!.name, { type: file!.type }),
@@ -62,7 +74,7 @@ const Mint = () => {
         let payload: I_NFT = {
           name: name,
           description: description,
-          imageLink: replaceIpfsLink(metadata.data.image.href),
+          imageLink: replaceIpfsLink(metadata.data.image),
           artist: activeAddress,
           owner: activeAddress,
           price: amount,
@@ -82,7 +94,7 @@ const Mint = () => {
             },
           ],
         };
-        let test = await nftMint(parseInt(royalties), metadata);
+        let test = await nftMint(parseInt(royalties), metadata.metadata);
         await Promise.all([
           axios.put(`${API_ENDPOINT}/nfts/${lastTokenId}`, payload),
           axios.post(`${API_ENDPOINT}/nfts/log/${lastTokenId}`, logs),
