@@ -19,30 +19,35 @@ const Footer = () => {
           </LinkWithSearchParams>
           <div><a href="https://docs.google.com/forms/d/1OnkPdYiERITcu_95VaD-jAp-IDzHvGtEBcAeTusTDYM/edit" target="_blank" rel="noopener noreferrer">ARTISTS APPLICATION</a></div>
         </div>
+        <div className="flex flex-col justify-between">
+          <div  className="text-[14px] font-semibold">We are experimenting...</div>
+        </div>
         <div className="flex flex-col justify-between text-right text-sm">
 
             <LinkWithSearchParams
+            className="text-[12px]"
               to={{
                 pathname: "/faq",
               }}
             >
-              FAQ
+              About
             </LinkWithSearchParams>
             <LinkWithSearchParams
+            className="text-[12px]"
               to={{
                 pathname: "/term",
               }}
             >
               Terms and conditions
             </LinkWithSearchParams>
-            <a href="mailto: GM@somethingrare.xyz">GM@somethingrare.xyz</a>
+            <a className="text-[12px]" href="mailto: GM@somethingrare.xyz">GM@somethingrare.xyz</a>
           
-            <div>FOLLOW US</div>
+            <div className="text-[12px]">FOLLOW US</div>
             <a
               href="https://twitter.com/_somethingrare"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex justify-end"
+              className="text-[12px] flex justify-end"
             >
               <FiTwitter />
             </a>

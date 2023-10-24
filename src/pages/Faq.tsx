@@ -1,7 +1,7 @@
 const Faq = () => {
   return (
     <div className="max-w-[1024px] mx-auto py-4 sm:px-8 lg:px-0">
-      <div className="text-[24px] text-center py-4">Frequently Asked Questions (FAQ)</div>
+      <div className="text-[24px] text-center py-4">About</div>
       <div className="flex flex-col gap-4">
         <div className="text-[18px]">How does the Tezos NFT marketplace work?</div>
         <div className="text-[12px]">
