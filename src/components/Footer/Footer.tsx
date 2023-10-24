@@ -8,6 +8,7 @@ const Footer = () => {
       <div className=" text-white flex justify-between py-12 h-60 max-w-[1024px] mx-auto sm:px-8 lg:px-0">
         <div className="flex flex-col justify-between">
           <LinkWithSearchParams
+            className="w-[200px] h-[100px]"
             to={{
               pathname: "/",
             }}
@@ -15,9 +16,9 @@ const Footer = () => {
             {/* <div className="text-xl border-r-8 border-white pr-4 w-24">
               GENESY
             </div> */}
-            <img width="220" height="100" src={footerLogo} alt="Somethingrare Logo"></img>
+            <img src={footerLogo} alt="Somethingrare Logo"></img>
           </LinkWithSearchParams>
-          <div><a href="https://docs.google.com/forms/d/1OnkPdYiERITcu_95VaD-jAp-IDzHvGtEBcAeTusTDYM/edit" target="_blank" rel="noopener noreferrer">ARTISTS APPLICATION</a></div>
+          <div className="ml-[8px]"><a href="https://docs.google.com/forms/d/1OnkPdYiERITcu_95VaD-jAp-IDzHvGtEBcAeTusTDYM/edit" target="_blank" rel="noopener noreferrer">ARTISTS APPLICATION</a></div>
         </div>
         <div className="flex flex-col justify-between">
           <div  className="text-[14px] font-semibold">We are experimenting...</div>
