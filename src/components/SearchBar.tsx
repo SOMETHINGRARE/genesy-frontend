@@ -58,7 +58,7 @@ const SearchBar = () => {
       }, []);
 
     return (
-      <div className={`search-input relative flex ${isExpanded ? "w-72" : "w-8"}`}>
+      <div className={`search-input relative flex ${isExpanded ? "w-80" : "w-8"}`}>
         <button
           className="mt-2 h-[34px] w-[34px] bg-black text-white p-2 cursor-pointer transition-transform transform hover:scale-105"
           onClick={() => setIsExpanded(!isExpanded)}
@@ -69,17 +69,17 @@ const SearchBar = () => {
         </button>
         <input
           type="text"
-          className={`mt-2 h-[34px]  bg-black text-white p-2 w-0 transform-gpu transition-width ${
-            isExpanded ? "w-64 outline-none" : ""
+          className={`mt-2 h-[34px]  bg-black text-white p-2 transform-gpu transition-width ${
+            isExpanded ? "w-72 outline-none" : "w-0"
           }`}
-          placeholder="Search..."
+          placeholder="Search by User..."
           style={{ display: isExpanded ? "block" : "none" }}
           value={searchInput}
           onChange={handleInputChange}
           onClick={handleInputClick}
         />
         {(searchResults.length > 0 && isExpanded) && (
-        <div ref={searchResultsRef} className="w-72 bg-gray-200 absolute top-[49px] right-0 z-50">
+        <div ref={searchResultsRef} className="w-80 bg-gray-200 absolute top-[42px] right-0 z-50">
           {searchResults.map((item: any, index: number) => (
             <div key={index}>
             <LinkWithSearchParams
