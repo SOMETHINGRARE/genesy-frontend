@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import LinkWithSearchParams from "./LinkWithSearchParams";
 import SearchArtistCard from "./Market/SearchArtistCard";
 import { API_ENDPOINT } from "../utils/constants";
-
+import searchIcon from '../assets/search_icon.jpg';
 
 const SearchBar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -60,16 +60,16 @@ const SearchBar = () => {
     return (
       <div className={`search-input relative flex items-center ${isExpanded ? "w-72" : "w-12"}`}>
         <button
-          className="h-[40px] bg-black text-white p-2 cursor-pointer transition-transform transform hover:scale-105"
+          className="h-[34px] w-[34px] bg-black text-white p-2 cursor-pointer transition-transform transform hover:scale-105"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <span role="img" aria-label="Search by Users" className="text-xl">
-            🔍
+            <img src={searchIcon}  alt="Search Icon"/>
           </span>
         </button>
         <input
           type="text"
-          className={`bg-black text-white p-2 w-0 transform-gpu transition-width ${
+          className={`h-[34px] bg-black text-white p-2 w-0 transform-gpu transition-width ${
             isExpanded ? "w-64 outline-none" : ""
           }`}
           placeholder="Search..."
