@@ -24,7 +24,7 @@ const PeersBoard = ({ peers }: any) => {
               }}
               className="flex items-center gap-4 my-2"
             >
-              <img src={item?.avatarLink} alt="avatar" className="w-8 h-8" />
+              <img src={item?.avatarLink} alt="avatar" className="w-6 h-6" />
               <div className="text-ellipsis">{item?.username}</div>
             </LinkWithSearchParams>
           </div>
@@ -271,7 +271,7 @@ const Asset = () => {
           <div className="mt-16">
             <div className="flex gap-2">
               <div className="border-b-2 border-black w-5"></div>
-              <div className="text-sm text-gray-400">CREATED BY</div>
+              <div className="text-xs text-gray-400">CREATED BY</div>
             </div>
             <div className="flex gap-2 items-center my-4 mb-2">
               <img
@@ -304,7 +304,7 @@ const Asset = () => {
                       <img
                         src={item?.avatarLink}
                         alt="avartar"
-                        className="w-8 h-8"
+                        className="w-6 h-6"
                       />
                     </LinkWithSearchParams>
                   </div>
@@ -330,7 +330,7 @@ const Asset = () => {
           <div>
             <div className="flex gap-2">
               <div className="border-b-2 border-black w-5"></div>
-              <div className="text-sm text-gray-400">COLLECTED BY</div>
+              <div className="text-xs text-gray-400">COLLECTED BY</div>
             </div>
             <div className="flex gap-2 items-center  my-4">
               <img
@@ -399,7 +399,7 @@ const Asset = () => {
                   <div>
                     <div className="flex gap-2">
                       <div className="border-b-2 border-black w-5"></div>
-                      <div className="text-sm text-gray-400">PRICE</div>
+                      <div className="text-xs text-gray-400">PRICE</div>
                     </div>
                     <div className="flex gap-2 items-center  my-4">
                       <div className="">
@@ -438,7 +438,7 @@ const Asset = () => {
               <div>
                 <div className="flex gap-2">
                   <div className="border-b-2 border-black w-5"></div>
-                  <div className="text-sm text-gray-400">PRICE</div>
+                  <div className="text-xs text-gray-400">PRICE</div>
                 </div>
 
                 <div className="flex gap-2 items-center  my-4">
