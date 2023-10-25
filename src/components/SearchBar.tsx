@@ -58,9 +58,9 @@ const SearchBar = () => {
       }, []);
 
     return (
-      <div className={`search-input relative flex items-center ${isExpanded ? "w-72" : "w-12"}`}>
+      <div className={`search-input relative flex ${isExpanded ? "w-72" : "w-8"}`}>
         <button
-          className="h-[34px] w-[34px] bg-black text-white p-2 cursor-pointer transition-transform transform hover:scale-105"
+          className="mt-2 h-[34px] w-[34px] bg-black text-white p-2 cursor-pointer transition-transform transform hover:scale-105"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <span role="img" aria-label="Search by Users" className="text-xl">
