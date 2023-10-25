@@ -69,7 +69,7 @@ const SearchBar = () => {
         </button>
         <input
           type="text"
-          className={`h-[34px] bg-black text-white p-2 w-0 transform-gpu transition-width ${
+          className={`mt-2 h-[34px]  bg-black text-white p-2 w-0 transform-gpu transition-width ${
             isExpanded ? "w-64 outline-none" : ""
           }`}
           placeholder="Search..."
