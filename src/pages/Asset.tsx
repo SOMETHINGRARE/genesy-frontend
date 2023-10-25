@@ -292,7 +292,7 @@ const Asset = () => {
             </div>
             {peers?.length! > 0 && (
             <div className="relative">
-              <div className="text-sm">Collector's Circle</div>
+              <div className="text-sm">Friends Supporters</div>
               <div className="flex gap-2 mt-2 my-4 items-center  hover:cursor-pointer">
                 {peers?.slice(0, 3)?.map((item: any, index: any) => (
                   <div key={index}>
@@ -465,14 +465,14 @@ const Asset = () => {
           <div className="border-b-2 border-black w-5"></div>
           <div className="text-3xl font-semibold">Description</div>
         </div>
-        <div className="py-4 text-sm">{nftItem.description}</div>
+        <div className="py-4 text-[15px]">{nftItem.description}</div>
         <div className="flex gap-4 py-2">
-          <div className="text-sm text-gray-400">ROYALTIES</div>
-          <div>{nftItem?.royalty}%</div>
+          <div className="text-xs text-gray-400">ROYALTIES</div>
+          <div className="text-xs">{nftItem?.royalty}%</div>
         </div>
         <div className="flex gap-4 py-2">
-          <div className="text-sm text-gray-400">ADDRESS</div>
-          <div>{NFT_CONTRACT_ADDRESS}</div>
+          <div className="text-xs text-gray-400">ADDRESS</div>
+          <div className="text-xs">{NFT_CONTRACT_ADDRESS}</div>
         </div>
         <div className="flex gap-4 font-bold py-4">
           <div className="flex items-center gap-4">
@@ -481,6 +481,7 @@ const Asset = () => {
               href={`https://ghostnet.tzkt.io/${NFT_CONTRACT_ADDRESS}/operations/`}
               target="_blank"
               rel="noopener noreferrer"
+              className="text-xs"
             >
               TzKT
             </a>
@@ -491,6 +492,7 @@ const Asset = () => {
               href={nftItem.imageLink}
               target="_blank"
               rel="noopener noreferrer"
+              className="text-xs"
             >
               IPFS
             </a>
@@ -505,10 +507,10 @@ const Asset = () => {
         <div className="flex flex-col gap-4">
   {logs?.map((item, index) => (
     <div key={index} className="grid grid-cols-5 gap-8">
-      <div className="text-sm text-gray-400" style={{ gridColumn: "span 1" }}>{dateFormat(item?.timestamp)}</div>
+      <div className="text-xs text-gray-400" style={{ gridColumn: "span 1" }}>{dateFormat(item?.timestamp)}</div>
       <div className="flex gap-2" style={{ gridColumn: "span 4" }}>
         {item.content?.map((content, index) => (
-          <div key={index}>
+          <div key={index} className="text-xs">
             {content.link.length > 0 ? (
               <LinkWithSearchParams
                 to={{
