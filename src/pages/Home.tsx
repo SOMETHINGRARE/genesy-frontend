@@ -4,6 +4,7 @@ import PrimaryFeed from "../components/Market/PrimaryFeed";
 import SeconddaryFeed from "../components/Market/SeconddaryFeed";
 import LinkWithSearchParams from "../components/LinkWithSearchParams";
 import LandTabs from "../components/Market/LandTabs";
+import SearchBar from "../components/SearchBar";
 import axios from "axios";
 
 const Home = () => {
@@ -31,23 +32,27 @@ const Home = () => {
         <div className="text-[18px]">Collect and Create Rare Digital Art on Tezos</div>
       </div>
       <div className=" pb-2 mt-24">
-        <div className="flex border-b-2 border-black">
-          {TAB_LIST.map((link, index) => (
-            <LinkWithSearchParams
-              key={index}
-              className={({ isActive }: { isActive: boolean }) =>
-                `flex flex-col font-medium ${
-                  isActive ? "active-dot market-tap-active" : "market-tap"
-                }`
-              }
-              to={{
-                pathname: link.path,
-              }}
-            >
-              <div className="text-center m-2">{link.text}</div>
-            </LinkWithSearchParams>
-          ))}
+        <div className="flex justify-between border-b-2 border-black">
+          <div className="flex">
+            {TAB_LIST.map((link, index) => (
+              <LinkWithSearchParams
+                key={index}
+                className={({ isActive }: { isActive: boolean }) =>
+                  `flex flex-col font-medium ${
+                    isActive ? "active-dot market-tap-active" : "market-tap"
+                  }`
+                }
+                to={{
+                  pathname: link.path,
+                }}
+              >
+                <div className="text-center m-2">{link.text}</div>
+              </LinkWithSearchParams>
+            ))}
+          </div>
+          <SearchBar></SearchBar>
         </div>
+        
         <LandTabs />
       </div>
     </div>
