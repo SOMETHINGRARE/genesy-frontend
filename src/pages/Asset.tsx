@@ -461,9 +461,9 @@ const Asset = () => {
         </div>
       </div>
       <div>
-        <div className="flex gap-2 text-2xl font-normal py-8">
+        <div className="flex gap-2 text-2xl font-normal py-8 pb-4">
           <div className="border-b-2 border-black w-5"></div>
-          <div className="text-3xl font-semibold">Description</div>
+          <div className="text-[24px] font-semibold">Description</div>
         </div>
         <div className="py-4 text-[15px]">{nftItem.description}</div>
         <div className="flex gap-4 py-2">
@@ -502,7 +502,7 @@ const Asset = () => {
       <div>
         <div className="flex gap-2 text-2xl font-normal py-8">
           <div className="border-b-2 border-black w-5"></div>
-          <div className="text-3xl font-semibold">History</div>
+          <div className="text-[20px] font-semibold">History</div>
         </div>
         <div className="flex flex-col gap-4">
   {logs?.map((item, index) => (
