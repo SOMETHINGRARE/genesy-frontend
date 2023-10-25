@@ -40,8 +40,8 @@ const SearchBar = () => {
       useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
           if (
-            searchResultsRef.current &&
-            !searchResultsRef.current.contains(e.target as Node) &&
+            // searchResultsRef.current &&
+            // !searchResultsRef.current.contains(e.target as Node) &&
             e.target &&
             e.target instanceof Element && // Ensure e.target is an Element
             !e.target.closest(".search-input") // Check if the click is not on the input field or its descendants
