@@ -290,10 +290,10 @@ const Asset = () => {
                 </LinkWithSearchParams>
               </div>
             </div>
-            {peers?.length! > 0 && (
             <div className="relative">
-              <div className="text-sm">Friends Supporters</div>
-              <div className="flex gap-2 mt-2 my-4 items-center  hover:cursor-pointer">
+            <div className="text-sm">Friends Supporters</div>
+            {peers?.length! > 0 && (
+              <div className="flex gap-2 mt-2 my-4 items-center hover:cursor-pointer">
                 {peers?.slice(0, 3)?.map((item: any, index: any) => (
                   <div key={index}>
                     <LinkWithSearchParams
@@ -301,26 +301,19 @@ const Asset = () => {
                         pathname: `/profile/${item?.wallet}`,
                       }}
                     >
-                      <img
-                        src={item?.avatarLink}
-                        alt="avartar"
-                        className="w-6 h-6"
-                      />
+                      <img src={item?.avatarLink} alt="avatar" className="w-6 h-6" />
                     </LinkWithSearchParams>
                   </div>
                 ))}
                 {peers?.length! > 3 && (
-                  <div
-                    className="font-semibold text-2xl "
-                    onClick={() => setIsPeers(!isPeers)}
-                  >
+                  <div className="font-semibold text-2xl " onClick={() => setIsPeers(!isPeers)}>
                     + {peers?.length! - 3} others
                   </div>
                 )}
               </div>
-              {isPeers && <PeersBoard peers={peers} />}
-            </div>
-          )}
+            )}
+            {isPeers && <PeersBoard peers={peers} />}
+          </div>
             {(!peers || !peers?.length) && (
               <div className="relative min-w-0 min-h-[60px]">
               </div>
