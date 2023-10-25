@@ -28,8 +28,8 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
       <div className="flex text-sm w-full">
         <div className="itemNft">
           <div className="flex justify-between  my-3 gap-4">
-            <div className="truncate">{nft?.name}</div>
-            <div className="truncate">
+            <div className="text-xs truncate">{nft?.name}</div>
+            <div className="text-xs truncate">
               {dateDifFromNow(
                 (nft?.lastSoldAmount == 0 ? nft?.mintedAt : nft?.lastSoldAt) ||
                   new Date()
@@ -45,13 +45,13 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
             <LazyLoadImage
               src={nft?.imageLink}
               alt="test"
-              className="primary-nft w-full"
+              className="primary-nft w-[400px] h-auto w-full"
             />
           </LinkWithSearchParams>
         </div>
-        <div className="nft-price text-end flex justify-end">
+        <div className="ml-1 nft-price text-end flex justify-end">
           <div className="border-l h-8 border-black ml-[7px] mb-2" />
-          <div>
+          <div className="text-xs">
             {nft?.lastSoldAmount == 0 ? nft?.price : nft?.lastSoldAmount} TZ
           </div>
         </div>
