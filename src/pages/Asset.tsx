@@ -321,6 +321,10 @@ const Asset = () => {
               {isPeers && <PeersBoard peers={peers} />}
             </div>
           )}
+            {(!peers || !peers?.length) && (
+              <div className="relative min-w-0 min-h-[60px]">
+              </div>
+            )}
           </div>
           
           <div>
@@ -428,7 +432,7 @@ const Asset = () => {
               </div>
             )
           ) : nftItem.price === 0 ? (
-            <></>
+            <div className="min-w-0 min-h-[120px]"></div>
           ) : (
             <div className="mt-[40px]">
               <div>
