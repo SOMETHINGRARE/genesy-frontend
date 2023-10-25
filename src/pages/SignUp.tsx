@@ -17,6 +17,9 @@ const SignUp = () => {
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [imageObject, setImageObject] = useState<File | null>(null);
+  const [isInComplete, setIsInComplete] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFeed(e.target.value);
   };
@@ -30,29 +33,47 @@ const SignUp = () => {
     reader.readAsDataURL(file);
   }
 
+  // Function to check if all required fields are completed
+  const checkCompletion = () => {
+    return name && description && twitter && imageObject;
+  };
+
+
   const saveProfile = async () => {
-    if (imageObject) {
-      try {
-        setIsLoad(true);
-        const cid = await pinToIpfs(imageObject);
-        setProfile(`https://${cid}.ipfs.nftstorage.link`);
-        let payload = {
-          username: name,
-          description: description,
-          feedOrder: feed,
-          avatarLink: `https://${cid}.ipfs.nftstorage.link`,
-          twitter: twitter,
-        };
-        await axios.put(`${API_ENDPOINT}/profiles/${activeAddress}`, payload);
-        await fetchProfile(activeAddress);
-        navigate("/home/primary");
-        setIsLoad(false);
-      } catch (error) {
-        console.log(error);
-        setIsLoad(false);
+    if (isInComplete) {
+      // Show an error message if any required fields are missing
+      setShowAlert(true)
+    } else {
+      setShowAlert(false)
+      if (imageObject) {
+        try {
+          setIsLoad(true);
+          const cid = await pinToIpfs(imageObject);
+          setProfile(`https://${cid}.ipfs.nftstorage.link`);
+          let payload = {
+            username: name,
+            description: description,
+            feedOrder: feed,
+            avatarLink: `https://${cid}.ipfs.nftstorage.link`,
+            twitter: twitter,
+          };
+          await axios.put(`${API_ENDPOINT}/profiles/${activeAddress}`, payload);
+          await fetchProfile(activeAddress);
+          navigate("/home/primary");
+          setIsLoad(false);
+        } catch (error) {
+          console.log(error);
+          setIsLoad(false);
+        }
       }
     }
+    
   };
+
+  // Check completion whenever any input field changes
+  useEffect(() => {
+    setIsInComplete(!checkCompletion());
+  }, [name, description, twitter, imageObject]);
 
   return (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
@@ -152,6 +173,13 @@ const SignUp = () => {
             <div>SAVE</div>
           )}
         </button>
+        {/* Alert message for incomplete details */}
+        {showAlert && (
+          <div className="text-red-500 py-2">
+            Please fill in all details.
+          </div>
+        )}
+
       </div>
     </div>
   );

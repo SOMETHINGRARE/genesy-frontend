@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Asset from "./pages/Asset";
@@ -16,15 +16,32 @@ import { useTezosCollectStore } from "./store";
 
 function App() {
   const { theme } = useTheme();
-  const { initializeContracts, fetchProfiles } = useTezosCollectStore();
+  const navigate = useNavigate();
+
+  const { activeAddress, fetchProfile, initializeContracts, fetchProfiles } = useTezosCollectStore();
+  // Define an async function to be used in useEffect
+  const fetchData = async () => {
+    try {
+      initializeContracts();
+      fetchProfiles();
+      const profile = await fetchProfile(activeAddress);
+
+      if (Object.keys(profile).length === 0) {
+        // Redirect to /signup if the profile is empty
+        navigate("/signup");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    initializeContracts();
-    fetchProfiles();
-  }, []);
+    // Call the async function
+    fetchData();
+  }, [activeAddress, fetchProfile, initializeContracts, fetchProfiles]);
 
   return (
     <div className={`${theme}`}>
-      <BrowserRouter>
         <Navbar />
         <Routes>
           <Route path="/" element={<Navigate to="/home/*" replace />} />
@@ -38,7 +55,6 @@ function App() {
           <Route path="/profile/:address/*" element={<Profile />} />
         </Routes>
         <Footer />
-      </BrowserRouter>
     </div>
   );
 }
