@@ -79,7 +79,7 @@ const SearchBar = () => {
           onClick={handleInputClick}
         />
         {(searchResults.length > 0 && isExpanded) && (
-        <div ref={searchResultsRef} className="w-80 bg-gray-200 absolute top-[42px] right-0 z-50">
+        <div ref={searchResultsRef} className="w-80 bg-gray-200 absolute top-[42px] right-0 z-50" style={{backgroundColor: "rgba(229, 231, 235, 0.7)"}}>
           {searchResults.map((item: any, index: number) => (
             <div key={index}>
             <LinkWithSearchParams
@@ -87,9 +87,7 @@ const SearchBar = () => {
                 pathname: `/profile/${item?.wallet}`,
               }}
             >
-              <div className="bg-gray-200 bg-opacity-40">
-                <SearchArtistCard profile={item} index={index} />
-              </div>
+              <SearchArtistCard profile={item} index={index} />
             </LinkWithSearchParams>
           </div>
           ))}
