@@ -113,7 +113,7 @@ const SignUp = () => {
             name="twitter"
             value={twitter}
             onChange={(e) => setTwitter(e.target.value)}
-            className="outline-none border-b border-black text-ws"
+            className="outline-none border-b border-black text-xs"
             placeholder="Write your Twitter username"
           />
         </div>
