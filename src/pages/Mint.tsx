@@ -255,6 +255,7 @@ const Mint = () => {
             onChange={onChange}
           />
         </div>
+      <div className="text-xs font-semibold">** Currently we are supporting square image ratio like 200x200 - 300x300 - 500x500</div>
       </div>
       <div className="relative">
         <button

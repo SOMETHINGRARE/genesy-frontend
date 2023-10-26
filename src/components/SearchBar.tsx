@@ -87,7 +87,9 @@ const SearchBar = () => {
                 pathname: `/profile/${item?.wallet}`,
               }}
             >
-              <SearchArtistCard profile={item} index={index} />
+              <div className="bg-gray-200 bg-opacity-40">
+                <SearchArtistCard profile={item} index={index} />
+              </div>
             </LinkWithSearchParams>
           </div>
           ))}
