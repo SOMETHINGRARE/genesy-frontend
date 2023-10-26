@@ -36,12 +36,28 @@ const Mint = () => {
       throw new Error('Canvas 2D context is not available.');
     }
   
-    // Set the canvas dimensions to the target size
-    canvas.width = targetWidth;
-    canvas.height = targetHeight;
+    const aspectRatio = image.width / image.height;
+    let newWidth, newHeight;
   
-    // Draw the image on the canvas with the new dimensions
-    ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+    if (aspectRatio > 1) {
+        // Landscape orientation
+        newWidth = targetWidth;
+        newHeight = targetWidth / aspectRatio;
+    } else {
+        // Portrait orientation
+        newHeight = targetHeight;
+        newWidth = targetHeight * aspectRatio;
+    }
+  
+    // Set the canvas dimensions to the new size
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+  
+    const x = (targetWidth - newWidth) / 2;
+    const y = (targetHeight - newHeight) / 2;
+  
+    // Draw the image on the canvas with the new dimensions and center it
+    ctx.drawImage(image, x, y, newWidth, newHeight);
   
     // Get the resized image data as a base64 string
     return canvas.toDataURL('image/jpeg');
@@ -63,65 +79,65 @@ const Mint = () => {
     setIsLoad(true);
     (async () => {
       try {
-        // const metadata = await client.store({
-        //   name: name,
-        //   description: description,
-        //   image: new File([file!], file!.name, { type: file!.type }),
-        //   symbol: "GENESY",
-        //   decimals: 0,
-        //   shouldPreferSymbol: false,
-        //   isBooleanAmount: true,
-        //   istransferable: true,
-        //   artifactUri: new File([file!], file!.name, { type: file!.type }),
-        //   displayUri: new File([file!], file!.name, { type: file!.type }),
-        //   thumbnailUri: new File([file!], file!.name, { type: file!.type }),
-        //   creators: ["genesy"],
-        // });
-        const metadata = await pinMetadataToIpfs({
-          name: name,
-          description: description,
-          image: new File([file!], file!.name, { type: file!.type }),
-          symbol: "GENESY",
-          decimals: 0,
-          shouldPreferSymbol: false,
-          isBooleanAmount: true,
-          istransferable: true,
-          artifactUri: new File([file!], file!.name, { type: file!.type }),
-          displayUri: new File([file!], file!.name, { type: file!.type }),
-          thumbnailUri: new File([file!], file!.name, { type: file!.type }),
-          creators: ["genesy"],
-        });
-        let payload: I_NFT = {
-          name: name,
-          description: description,
-          imageLink: replaceIpfsLink(metadata.data.image),
-          artist: activeAddress,
-          owner: activeAddress,
-          price: amount,
-          royalty: parseFloat(royalties),
-          mintedAt: new Date(),
+        const image = new Image();
+        image.src = base64image;
+        image.onload = async () => {
+          // const thumbnailBase64 = resizeImage(image, 400, 400);
+  
+          // // Create a thumbnail file to be used as the thumbnailUri
+          // const thumbnailFile = new File([thumbnailBase64], 'thumbnail.jpg', { type: 'image/jpeg' });
+  
+          const metadata = await pinMetadataToIpfs({
+            name: name,
+            description: description,
+            image: new File([file!], file!.name, { type: file!.type }),
+            symbol: "GENESY",
+            decimals: 0,
+            shouldPreferSymbol: false,
+            isBooleanAmount: true,
+            istransferable: true,
+            artifactUri: new File([file!], file!.name, { type: file!.type }),
+            displayUri: new File([file!], file!.name, { type: file!.type }),
+            thumbnailUri: new File([file!], file!.name, { type: file!.type }), 
+            creators: ["genesy"],
+          });
+
+          let payload: I_NFT = {
+            name: name,
+            description: description,
+            imageLink: replaceIpfsLink(metadata.data.image),
+            thumbnailLink: replaceIpfsLink(metadata.data.thumbnailUri),
+            artist: activeAddress,
+            owner: activeAddress,
+            price: amount,
+            royalty: parseFloat(royalties),
+            mintedAt: new Date(),
+          };
+  
+          let logs: I_Log = {
+            timestamp: new Date(),
+            content: [
+              {
+                text: `${profile?.username}`,
+                link: `${profile?.wallet}`,
+              },
+              {
+                text: "minted",
+                link: "",
+              },
+            ],
+          };
+  
+          let test = await nftMint(parseInt(royalties), metadata.metadata);
+          await Promise.all([
+            axios.put(`${API_ENDPOINT}/nfts/${lastTokenId}`, payload),
+            axios.post(`${API_ENDPOINT}/nfts/log/${lastTokenId}`, logs),
+            updateLastTokenId(),
+          ]);
+  
+          setIsLoad(false);
+          navigate(`/profile/${activeAddress}/owned`);
         };
-        let logs: I_Log = {
-          timestamp: new Date(),
-          content: [
-            {
-              text: `${profile?.username}`,
-              link: `${profile?.wallet}`,
-            },
-            {
-              text: "minted",
-              link: "",
-            },
-          ],
-        };
-        let test = await nftMint(parseInt(royalties), metadata.metadata);
-        await Promise.all([
-          axios.put(`${API_ENDPOINT}/nfts/${lastTokenId}`, payload),
-          axios.post(`${API_ENDPOINT}/nfts/log/${lastTokenId}`, logs),
-          updateLastTokenId(),
-        ]);
-        setIsLoad(false);
-        navigate(`/profile/${activeAddress}/owned`);
       } catch (error) {
         console.log(error);
         setIsLoad(false);
@@ -135,17 +151,18 @@ const Mint = () => {
   
     const reader = new FileReader();
     reader.onload = async function (event) {
-      const base64image = event.target!.result!.toString();
+      setBase64image(event.target!.result!.toString());
+    //   const base64image = event.target!.result!.toString();
   
-      // Create a new image element
-      const image = new Image();
+    //   // Create a new image element
+    //   const image = new Image();
+      
+    //   image.onload = async () => {
+    //     const resizedBase64 = resizeImage(image, 400, 400);
+    //     setBase64image(resizedBase64);
+    //   };
   
-      image.onload = async () => {
-        const resizedBase64 = resizeImage(image, 400, 400);
-        setBase64image(resizedBase64);
-      };
-  
-      image.src = base64image;
+    //   image.src = base64image;
     };
   
     reader.readAsDataURL(file);

@@ -54,6 +54,7 @@ const Asset = () => {
     artist: "",
     description: "",
     imageLink: "",
+    thumbnailLink: "",
     name: "",
     owner: "",
   });
