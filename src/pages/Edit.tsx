@@ -140,7 +140,7 @@ const Edit = () => {
                   checked={feed === i}
                   onChange={() => handleChange(i)}
                 />
-                <label htmlFor={item} className={`pl-1 ${i === 1 ? "inline" : ""}`}>
+                <label htmlFor={item} className={`pl-1 ${i === 1 ? "inline-block" : ""}`}>
                   {i === 1 ? (
                     <span className="flex items-center">
                       {item}
