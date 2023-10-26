@@ -94,7 +94,7 @@ const Edit = () => {
         <div className="text-3xl">Edit Profile</div>
 
         <div className="flex flex-col py-4">
-          <div>USERNAME*</div>
+          <div className="text-sm py-2">USERNAME*</div>
           <input
             type="text"
             name="name"
@@ -105,7 +105,7 @@ const Edit = () => {
           />
         </div>
         <div className="flex flex-col py-4">
-          <div>DESCRIPTION*</div>
+          <div className="text-sm py-2">DESCRIPTION*</div>
           <input
             type="text"
             name="description"
@@ -116,18 +116,18 @@ const Edit = () => {
           />
         </div>
         <div className="flex flex-col py-4">
-          <div>TWITTER ACCOUNT*</div>
+          <div className="text-sm py-2">TWITTER ACCOUNT*</div>
           <input
             type="text"
             name="twitter"
             value={twitter}
             onChange={(e) => setTwitter(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Write your Twitter username"
           />
         </div>
         <div className="py-4">
-          <div>FEED ORDER*</div>
+          <div className="text-sm py-2">FEED ORDER*</div>
           <div>
             {orderType.map((item, i) => (
               <div key={i}>
@@ -148,7 +148,7 @@ const Edit = () => {
         </div>
 
         <div className="flex flex-col py-4 gap-2">
-          <div>UPLOAD IMAGE</div>
+          <div className="text-sm py-2">UPLOAD IMAGE</div>
           <div className="flex">
             <ImageDropZone
               imageObject={imageObject}

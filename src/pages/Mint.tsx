@@ -129,14 +129,14 @@ const Mint = () => {
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
       <div className="text-3xl font-medium">Mint a new piece of art</div>
       <div className="flex flex-col py-4 gap-2 relative">
-        <div>TITLE*</div>
+        <div className="text-sm py-2">TITLE*</div>
         <input
           type="text"
           name="name"
           value={name}
           disabled={isLoad}
           onChange={(e) => setName(e.target.value)}
-          className="outline-none border-b border-black"
+          className="outline-none border-b border-black text-xs"
           placeholder="Title of your art piece"
         />
         {name.length > 30 ? (
@@ -146,13 +146,13 @@ const Mint = () => {
         ) : null}
       </div>
       <div className="flex flex-col py-4 gap-2 relative">
-        <div>DESCRIPTION*</div>
+        <div className="text-sm py-2">DESCRIPTION*</div>
         <textarea
           name="name"
           value={description}
           disabled={isLoad}
           onChange={(e) => setDescription(e.target.value)}
-          className="outline-none border-b border-black"
+          className="outline-none border-b border-black text-xs"
           placeholder="Add a detailed description about this piece of art."
         />
         {description.length > 300 ? (
@@ -162,25 +162,25 @@ const Mint = () => {
         ) : null}
       </div>
       <div className="flex flex-col py-4 gap-2 relative">
-        <div>ROYALTIES*</div>
+        <div className="text-sm py-2">ROYALTIES*</div>
         <input
           type="text"
           name="name"
           value={royalties}
           disabled={isLoad}
           onChange={(e) => setRoyalties(e.target.value)}
-          className="outline-none border-b border-black"
+          className="outline-none border-b border-black text-xs"
           placeholder="You can set a value between 0 and 15%"
         />
         {parseInt(royalties) > 10 && (
-          <div className="text-red-700 text-sm top-20 absolute">
+          <div className="text-red-700 text-xs top-20 absolute">
             As common practice, please enter a value between 0 and 10%!
           </div>
         )}
       </div>
 
       <div className="flex flex-col py-4 gap-2">
-        <div>UPLOAD ART</div>
+        <div className="text-sm py-2">UPLOAD ART</div>
         <div className="flex">
           <label htmlFor="asset" className="">
             {base64image ? (

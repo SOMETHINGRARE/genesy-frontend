@@ -22,7 +22,7 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
             alt="avatar"
             className="w-6 h-6"
           />
-          <div className="font-bold">{profile?.username}</div>
+          <div className="font-semibold">{profile?.username}</div>
         </div>
       </LinkWithSearchParams>
       <div className="flex text-sm w-full">
