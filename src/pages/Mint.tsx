@@ -27,6 +27,26 @@ const Mint = () => {
   const [error, setError] = useState<string>("");
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
+
+  function resizeImage(image: HTMLImageElement, targetWidth: number, targetHeight: number): string {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+  
+    if (!ctx) {
+      throw new Error('Canvas 2D context is not available.');
+    }
+  
+    // Set the canvas dimensions to the target size
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
+  
+    // Draw the image on the canvas with the new dimensions
+    ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+  
+    // Get the resized image data as a base64 string
+    return canvas.toDataURL('image/jpeg');
+  }
+
   const onSubmit = (e: any) => {
     e.preventDefault();
     if (
@@ -112,12 +132,25 @@ const Mint = () => {
   async function onChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files![0];
     setFile(file);
+  
     const reader = new FileReader();
-    reader.onload = function (event) {
-      setBase64image(event.target!.result!.toString());
+    reader.onload = async function (event) {
+      const base64image = event.target!.result!.toString();
+  
+      // Create a new image element
+      const image = new Image();
+  
+      image.onload = async () => {
+        const resizedBase64 = resizeImage(image, 400, 400);
+        setBase64image(resizedBase64);
+      };
+  
+      image.src = base64image;
     };
+  
     reader.readAsDataURL(file);
   }
+  
   useEffect(() => {
     const fetchData = async () => {
       let res = await fetchProfile(activeAddress);
