@@ -6,10 +6,11 @@ import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useTezosCollectStore } from "../store";
+import { BsBookmark } from "react-icons/bs";
 
 const Edit = () => {
   const navigate = useNavigate();
-  const orderType = ["Chronological", "Curated"];
+  const orderType = ["Chronological", `Curate your own page with Flags`];
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [twitter, setTwitter] = useState<string>("");
@@ -100,7 +101,7 @@ const Edit = () => {
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Choose the username that will appear on your profile"
           />
         </div>
@@ -111,7 +112,7 @@ const Edit = () => {
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Write a few words about who you are"
           />
         </div>
@@ -139,8 +140,15 @@ const Edit = () => {
                   checked={feed === i}
                   onChange={() => handleChange(i)}
                 />
-                <label htmlFor={item} className="pl-1">
-                  {item}
+                <label htmlFor={item} className={`pl-1 ${i === 1 ? "inline" : ""}`}>
+                  {i === 1 ? (
+                    <span className="flex items-center">
+                      {item}
+                      <BsBookmark className="ml-[5px] font-bold" />
+                    </span>
+                  ) : (
+                    item
+                  )}
                 </label>
               </div>
             ))}

@@ -6,6 +6,7 @@ import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useTezosCollectStore } from "../store";
+import { BsBookmark } from "react-icons/bs";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -90,7 +91,7 @@ const SignUp = () => {
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Choose the username that will appear on your profile"
           />
         </div>
@@ -101,7 +102,7 @@ const SignUp = () => {
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Write a few words about who you are"
           />
         </div>
@@ -140,8 +141,11 @@ const SignUp = () => {
                 value="1"
                 onChange={(e) => handleChange(e)}
               />
-              <label htmlFor="curated" className="pl-1">
-                Curated
+              <label htmlFor="curated" className="pl-1 inline-block">
+                <span className="flex items-center">
+                  Curate your own page with Flags
+                  <BsBookmark className="ml-[5px] font-bold" />
+                </span>
               </label>
             </div>
           </div>
