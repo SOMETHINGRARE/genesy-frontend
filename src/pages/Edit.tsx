@@ -7,6 +7,7 @@ import { API_ENDPOINT } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useTezosCollectStore } from "../store";
 import { BsBookmark, BsTwitter } from "react-icons/bs";
+import { MdVerified } from "react-icons/md";
 import { PROFILES_API_URL, PROFILES_URL } from "../utils/constants"
 
 const Edit = () => {
@@ -141,7 +142,14 @@ const Edit = () => {
           />
         </div>
         <div className="flex flex-col py-4">
-          <div className="text-sm py-2">TWITTER ACCOUNT*</div>
+          <div className="text-sm py-2 flex items-center">
+            TWITTER ACCOUNT*
+            {twitter ? (
+              <MdVerified style={{ color: 'blue' }} className="ml-[10px]" />
+            ) : (
+              <span className="text-xs">(Please verify your account)</span>
+            )}
+          </div>
           <input
             type="text"
             name="twitter"
@@ -193,7 +201,7 @@ const Edit = () => {
             <div className="text-sm py-2">TWITTER ACCOUNT</div>
             <div className="flex">
 
-              <button className="border border-black text-3xl flex items-center justify-center p-8"
+              <button className="hover:bg-sky-400/50 border border-black text-3xl flex items-center justify-center p-8"
              onClick={(event) => getTwitter(activeAddress)}
             >
               <BsTwitter className="hover:opacity-70"/>
