@@ -69,17 +69,21 @@ const SearchBar = () => {
         </button>
         <input
           type="text"
-          className={`mt-2 h-[34px]  bg-black text-white p-2 transform-gpu transition-width ${
+          className={`mt-2 text-xs h-[34px]  bg-black text-white p-2 transform-gpu transition-width ${
             isExpanded ? "w-72 outline-none" : "w-0"
           }`}
-          placeholder="Search by User..."
+          placeholder="Search by user or wallet address..."
           style={{ display: isExpanded ? "block" : "none" }}
           value={searchInput}
           onChange={handleInputChange}
           onClick={handleInputClick}
         />
         {(searchResults.length > 0 && isExpanded) && (
-        <div ref={searchResultsRef} className="w-80 bg-gray-200 absolute top-[42px] right-0 z-50" style={{backgroundColor: "rgba(229, 231, 235, 0.7)"}}>
+        <div ref={searchResultsRef} className="w-80 bg-gray-200 absolute top-[42px] right-0 z-50"  style={{
+          backgroundColor: "rgba(229, 231, 235, 0.7)",
+          maxHeight: "400px", // Set the maximum height as needed
+          overflowY: "auto", // Enable vertical scrolling if content exceeds the maximum height
+        }}>
           {searchResults.map((item: any, index: number) => (
             <div key={index}>
             <LinkWithSearchParams

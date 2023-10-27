@@ -128,6 +128,9 @@ const Profile = () => {
     </div>
   ) : (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
+      <a href={profile?.twitter} target="_blank">
+      <BsTwitter className="mb-4"/>
+      </a>
       <div className="flex justify-between">
         <div className="mb-6">
           <div className="text-2xl font-bold">{profile?.username}</div>
