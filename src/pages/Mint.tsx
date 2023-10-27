@@ -28,36 +28,42 @@ const Mint = () => {
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
-  function resizeImage(image: HTMLImageElement, targetHeight: number): string {
+  function resizeImage(image: HTMLImageElement, targetWidth: number): string {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-  
+
     if (!ctx) {
-      throw new Error('Canvas 2D context is not available.');
+        throw new Error('Canvas 2D context is not available.');
     }
-  
+
     const aspectRatio = image.width / image.height;
-  
-    // Calculate the new width based on the target height and the aspect ratio
-    const newWidth = targetHeight * aspectRatio;
-  
+
+    // Calculate the new height based on the target width and the aspect ratio
+    const newHeight = targetWidth / aspectRatio;
+
     // Set the canvas dimensions to the new size
-    canvas.width = newWidth;
-    canvas.height = targetHeight;
-  
+    canvas.width = targetWidth;
+    canvas.height = newHeight;
+
     // Fill the canvas with a white background
     ctx.fillStyle = 'white'; // You can change 'white' to any desired background color
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
+    // Calculate the horizontal and vertical centering
     const x = 0; // No need for horizontal centering
     const y = 0; // No need for vertical centering
-  
+
     // Draw the image on the canvas with the new dimensions and centered on the white background
-    ctx.drawImage(image, x, y, newWidth, targetHeight);
-  
+    ctx.drawImage(image, x, y, targetWidth, newHeight);
+
     // Get the resized image data as a base64 string
+    const thumbnailWidth = canvas.width;
+    const thumbnailHeight = canvas.height;
+    console.log(thumbnailWidth, thumbnailHeight);
+
     return canvas.toDataURL('image/jpeg');
-  }
+}
+
   
   
 
@@ -84,7 +90,7 @@ const Mint = () => {
   
           // Create a thumbnail file to be used as the thumbnailUri
           const thumbnailFile = new File([thumbnailBase64], file!.name, { type: file!.type });
-
+          
           const metadata = await pinMetadataToIpfs({
             name: name,
             description: description,
