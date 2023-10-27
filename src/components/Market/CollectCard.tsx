@@ -43,7 +43,8 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
             className="w-full"
           >
             <LazyLoadImage
-              src={nft?.imageLink}
+              // src={nft?.imageLink}
+              src={nft?.thumbnailLink}
               alt="test"
               className="primary-nft w-[400px] h-auto w-full"
             />

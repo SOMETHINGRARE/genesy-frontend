@@ -28,7 +28,7 @@ const Mint = () => {
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
-  function resizeImage(image: HTMLImageElement, targetWidth: number, targetHeight: number): string {
+  function resizeImage(image: HTMLImageElement, targetHeight: number): string {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
   
@@ -37,31 +37,29 @@ const Mint = () => {
     }
   
     const aspectRatio = image.width / image.height;
-    let newWidth, newHeight;
   
-    if (aspectRatio > 1) {
-        // Landscape orientation
-        newWidth = targetWidth;
-        newHeight = targetWidth / aspectRatio;
-    } else {
-        // Portrait orientation
-        newHeight = targetHeight;
-        newWidth = targetHeight * aspectRatio;
-    }
+    // Calculate the new width based on the target height and the aspect ratio
+    const newWidth = targetHeight * aspectRatio;
   
     // Set the canvas dimensions to the new size
     canvas.width = newWidth;
-    canvas.height = newHeight;
+    canvas.height = targetHeight;
   
-    const x = (targetWidth - newWidth) / 2;
-    const y = (targetHeight - newHeight) / 2;
+    // Fill the canvas with a white background
+    ctx.fillStyle = 'white'; // You can change 'white' to any desired background color
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-    // Draw the image on the canvas with the new dimensions and center it
-    ctx.drawImage(image, x, y, newWidth, newHeight);
+    const x = 0; // No need for horizontal centering
+    const y = 0; // No need for vertical centering
+  
+    // Draw the image on the canvas with the new dimensions and centered on the white background
+    ctx.drawImage(image, x, y, newWidth, targetHeight);
   
     // Get the resized image data as a base64 string
     return canvas.toDataURL('image/jpeg');
   }
+  
+  
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -82,11 +80,11 @@ const Mint = () => {
         const image = new Image();
         image.src = base64image;
         image.onload = async () => {
-          // const thumbnailBase64 = resizeImage(image, 400, 400);
+          const thumbnailBase64 = resizeImage(image, 400);
   
-          // // Create a thumbnail file to be used as the thumbnailUri
-          // const thumbnailFile = new File([thumbnailBase64], 'thumbnail.jpg', { type: 'image/jpeg' });
-  
+          // Create a thumbnail file to be used as the thumbnailUri
+          const thumbnailFile = new File([thumbnailBase64], file!.name, { type: file!.type });
+
           const metadata = await pinMetadataToIpfs({
             name: name,
             description: description,
@@ -98,10 +96,11 @@ const Mint = () => {
             istransferable: true,
             artifactUri: new File([file!], file!.name, { type: file!.type }),
             displayUri: new File([file!], file!.name, { type: file!.type }),
-            thumbnailUri: new File([file!], file!.name, { type: file!.type }), 
+            thumbnailUri: thumbnailFile, 
+            // thumbnailUri: new File([file!], file!.name, { type: file!.type }), 
             creators: ["genesy"],
           });
-
+          console.log(metadata.data)
           let payload: I_NFT = {
             name: name,
             description: description,
@@ -152,17 +151,17 @@ const Mint = () => {
     const reader = new FileReader();
     reader.onload = async function (event) {
       setBase64image(event.target!.result!.toString());
-    //   const base64image = event.target!.result!.toString();
+      // const base64image = event.target!.result!.toString();
   
-    //   // Create a new image element
-    //   const image = new Image();
+      // // Create a new image element
+      // const image = new Image();
       
-    //   image.onload = async () => {
-    //     const resizedBase64 = resizeImage(image, 400, 400);
-    //     setBase64image(resizedBase64);
-    //   };
+      // image.onload = async () => {
+      //   const resizedBase64 = resizeImage(image, 400);
+      //   setBase64image(resizedBase64);
+      // };
   
-    //   image.src = base64image;
+      // image.src = base64image;
     };
   
     reader.readAsDataURL(file);
@@ -236,7 +235,7 @@ const Mint = () => {
             {base64image ? (
               <img
                 className="rounded mt-4"
-                width="350"
+                // width="350"
                 src={base64image}
                 alt="preview"
               />
@@ -255,7 +254,7 @@ const Mint = () => {
             onChange={onChange}
           />
         </div>
-      <div className="text-xs font-semibold">** Currently we are supporting square image ratio like 200x200 - 300x300 - 500x500</div>
+      {/* <div className="text-xs font-semibold">** Currently we are supporting square image ratio like 200x200 - 300x300 - 500x500</div> */}
       </div>
       <div className="relative">
         <button

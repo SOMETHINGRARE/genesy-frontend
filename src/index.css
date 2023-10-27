@@ -36,7 +36,10 @@ body {
 }
 
 .primary-nft {
-  aspect-ratio: 1;
+  /* aspect-ratio: 1; */
+  height: 400px !important;
+  width: auto !important;
+  max-width: 400px !important;
 }
 
 /* width */
