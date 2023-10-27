@@ -16,6 +16,9 @@ export const TEZOS_COLLECT_NETWORK: Network = {
 const MAINNET_RPC_URL: string = "https://mainnet.api.tez.ie";
 const GHOSTNET_RPC_URL: string = "https://rpc.tzkt.io/ghostnet";
 
+export const PROFILES_API_URL : string = "https://api.tzprofiles.com/";
+export const PROFILES_URL : string = "https://tzprofiles.com/";
+
 const TEZOS_COLLECT_RPC_URL =
   TEZOS_COLLECT_NETWORK.type === NetworkType.GHOSTNET
     ? GHOSTNET_RPC_URL
@@ -71,6 +74,6 @@ export const NFT_CONTRACT_ADDRESS = NFT_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 // export const API_ENDPOINT =
 //   process.env.NODE_ENV === "development"
 //     ? "http://localhost:80"
-//     : "https://api.genesy.xyz";
+//     : "https://api.somethingrare.xyz";
 
 export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";

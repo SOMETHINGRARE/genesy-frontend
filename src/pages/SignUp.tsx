@@ -6,7 +6,8 @@ import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useTezosCollectStore } from "../store";
-import { BsBookmark } from "react-icons/bs";
+import { BsBookmark, BsTwitter } from "react-icons/bs";
+import { PROFILES_API_URL, PROFILES_URL } from "../utils/constants"
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const SignUp = () => {
   const [imageObject, setImageObject] = useState<File | null>(null);
   const [isInComplete, setIsInComplete] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+  const [isTwitterLoading, setIsTwitterLoading] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFeed(e.target.value);
@@ -39,6 +41,26 @@ const SignUp = () => {
     return name && description && twitter && imageObject;
   };
 
+  async function getTwitter(activeAddress: string) {
+    setIsTwitterLoading(true);
+
+    try {
+      const metadata = await axios.get(`${PROFILES_API_URL}${activeAddress}`)
+      console.log(metadata)
+      if (metadata.data && Array.isArray(metadata.data) && metadata.data.length > 0) {
+        const jsonData = JSON.parse(metadata.data[0][1]);
+        const twitterHandle = jsonData.credentialSubject.sameAs;
+        setTwitter(twitterHandle);
+      } else {
+        // Redirect the user to https://tzprofiles.com/
+        window.open(`${PROFILES_URL}`, "_blank");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsTwitterLoading(false);
+    }
+  }
 
   const saveProfile = async () => {
     if (isInComplete) {
@@ -112,9 +134,10 @@ const SignUp = () => {
             type="text"
             name="twitter"
             value={twitter}
-            onChange={(e) => setTwitter(e.target.value)}
+            // onChange={(e) => setTwitter(e.target.value)}
             className="outline-none border-b border-black text-xs"
-            placeholder="Write your Twitter username"
+            placeholder="Authorize with Twitter account from TzProfiles"
+            disabled 
           />
         </div>
         <div className="py-4">
@@ -151,13 +174,28 @@ const SignUp = () => {
           </div>
         </div>
 
-        <div className="flex flex-col py-4 gap-2">
-          <div className="text-sm py-2">UPLOAD IMAGE</div>
-          <div className="flex">
-            <ImageDropZone
-              imageObject={imageObject}
-              setImageObject={setImageObject}
-            />
+        <div className="flex">
+          <div className="flex flex-col py-4 gap-2 pr-16">
+            <div className="text-sm py-2">UPLOAD IMAGE</div>
+            <div className="flex">
+              <ImageDropZone
+                imageObject={imageObject}
+                setImageObject={setImageObject}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col py-4 gap-2">
+            <div className="text-sm py-2">TWITTER ACCOUNT</div>
+            <div className="flex">
+
+              <button className="border border-black text-3xl flex items-center justify-center p-8"
+             onClick={(event) => getTwitter(activeAddress)}
+            >
+              <BsTwitter className="hover:opacity-70"/>
+            </button>
+        
+            
+            </div>
           </div>
         </div>
         <button
@@ -172,6 +210,15 @@ const SignUp = () => {
                 className="inline mr-3 w-4 h-4 text-white animate-spin"
               />
               SAVING...
+            </div>
+          ) : isTwitterLoading ? (
+            <div className="flex items-center justify-center">
+              <img
+                src={spinner}
+                alt="spinner"
+                className="inline mr-3 w-4 h-4 text-white animate-spin"
+              />
+              FETCHING...
             </div>
           ) : (
             <div>SAVE</div>

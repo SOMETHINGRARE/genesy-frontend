@@ -6,7 +6,8 @@ import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useTezosCollectStore } from "../store";
-import { BsBookmark } from "react-icons/bs";
+import { BsBookmark, BsTwitter } from "react-icons/bs";
+import { PROFILES_API_URL, PROFILES_URL } from "../utils/constants"
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const Edit = () => {
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [imageObject, setImageObject] = useState<File | null>(null);
+  const [isTwitterLoading, setIsTwitterLoading] = useState(false);
+
   const handleChange = (i: number) => {
     setFeed(i);
   };
@@ -38,6 +41,27 @@ const Edit = () => {
       }
     })();
   }, []);
+
+  async function getTwitter(activeAddress: string) {
+    setIsTwitterLoading(true);
+
+    try {
+      const metadata = await axios.get(`${PROFILES_API_URL}${activeAddress}`)
+      console.log(metadata)
+      if (metadata.data && Array.isArray(metadata.data) && metadata.data.length > 0) {
+        const jsonData = JSON.parse(metadata.data[0][1]);
+        const twitterHandle = jsonData.credentialSubject.sameAs;
+        setTwitter(twitterHandle);
+      } else {
+        // Redirect the user to https://tzprofiles.com/
+        window.open(`${PROFILES_URL}`, "_blank");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsTwitterLoading(false);
+    }
+  }
 
   const updateProfile = async () => {
     if (imageObject) {
@@ -122,9 +146,10 @@ const Edit = () => {
             type="text"
             name="twitter"
             value={twitter}
-            onChange={(e) => setTwitter(e.target.value)}
+            // onChange={(e) => setTwitter(e.target.value)}
             className="outline-none border-b border-black text-xs"
-            placeholder="Write your Twitter username"
+            placeholder="Authorize with Twitter account from TzProfiles"
+            disabled 
           />
         </div>
         <div className="py-4">
@@ -154,16 +179,31 @@ const Edit = () => {
             ))}
           </div>
         </div>
+        <div className="flex">
+          <div className="flex flex-col py-4 gap-2 pr-16">
+            <div className="text-sm py-2">UPLOAD IMAGE</div>
+            <div className="flex">
+              <ImageDropZone
+                imageObject={imageObject}
+                setImageObject={setImageObject}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col py-4 gap-2">
+            <div className="text-sm py-2">TWITTER ACCOUNT</div>
+            <div className="flex">
 
-        <div className="flex flex-col py-4 gap-2">
-          <div className="text-sm py-2">UPLOAD IMAGE</div>
-          <div className="flex">
-            <ImageDropZone
-              imageObject={imageObject}
-              setImageObject={setImageObject}
-            />
+              <button className="border border-black text-3xl flex items-center justify-center p-8"
+             onClick={(event) => getTwitter(activeAddress)}
+            >
+              <BsTwitter className="hover:opacity-70"/>
+            </button>
+        
+            
+            </div>
           </div>
         </div>
+        
         <button
           className="py-2 bg-black text-white w-32  my-4 hover:bg-gray-600"
           onClick={() => updateProfile()}
@@ -176,6 +216,15 @@ const Edit = () => {
                 className="inline mr-3 w-4 h-4 text-white animate-spin"
               />
               UPDATING...
+            </div>
+          ) : isTwitterLoading ? (
+            <div className="flex items-center justify-center">
+              <img
+                src={spinner}
+                alt="spinner"
+                className="inline mr-3 w-4 h-4 text-white animate-spin"
+              />
+              FETCHING...
             </div>
           ) : (
             <div>UPDATE</div>
