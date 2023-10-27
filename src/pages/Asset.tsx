@@ -266,7 +266,9 @@ const Asset = () => {
   ) : (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
       <div className="flex gap-24 max-h-[545px]">
-        <img src={nftItem.imageLink} alt="test" className="max-h-full w-1/2" />
+        <div className="max-h-full w-1/2">
+          <img src={nftItem.imageLink} alt="test" className="max-h-full w-full h-auto" />
+        </div>
         <div className="w-1/2 flex flex-col gap-4 justify-between">
           <div className="text-4xl font-semibold">{nftItem.name}</div>
           <div className="mt-16">
