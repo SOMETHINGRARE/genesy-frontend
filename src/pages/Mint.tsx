@@ -89,7 +89,7 @@ const Mint = () => {
           const thumbnailBase64 = resizeImage(image, 400);
   
           // Create a thumbnail file to be used as the thumbnailUri
-          const thumbnailFile = new File([thumbnailBase64], file!.name, { type: file!.type });
+          const thumbnailFile = new File([thumbnailBase64], `thumbnail.jpg`, { type: file!.type });
           
           const metadata = await pinMetadataToIpfs({
             name: name,

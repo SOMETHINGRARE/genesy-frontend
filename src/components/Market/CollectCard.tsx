@@ -6,8 +6,9 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 type ICollectProps = {
   nft?: I_NFT;
   profile?: I_PROFILE;
+  ratio?: string;
 };
-const CollectCard = ({ nft, profile }: ICollectProps) => {
+const CollectCard = ({ nft, profile, ratio }: ICollectProps) => {
   console.log("nft", nft);
   return (
     <div className="flex flex-col py-4 cursor-pointer w-full">
@@ -46,7 +47,8 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
               // src={nft?.imageLink}
               src={nft?.thumbnailLink}
               alt="test"
-              className="primary-nft w-[400px] h-auto w-full"
+              className="collect-card w-[400px] h-auto w-full"
+              style={{ aspectRatio: ratio }}
             />
           </LinkWithSearchParams>
         </div>

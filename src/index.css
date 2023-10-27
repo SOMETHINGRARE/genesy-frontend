@@ -36,7 +36,10 @@ body {
 }
 
 .primary-nft {
-  /* aspect-ratio: 1; */
+  aspect-ratio: 1;
+}
+
+.collect-card {
   width: 400px !important;
   height: auto !important;
   max-height: 400px !important;
