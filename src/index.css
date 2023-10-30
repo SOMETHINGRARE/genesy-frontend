@@ -42,7 +42,7 @@ body {
 .collect-card {
   width: 400px !important;
   height: auto !important;
-  max-height: 400px !important;
+  /* max-height: 400px !important; */
 }
 
 /* width */
