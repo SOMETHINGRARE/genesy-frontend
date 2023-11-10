@@ -67,7 +67,7 @@ const Profile = () => {
       }
     };
     fetchBookmark();
-  }, [isBookmark]);
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
