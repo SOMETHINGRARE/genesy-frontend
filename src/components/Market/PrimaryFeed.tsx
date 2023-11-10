@@ -6,6 +6,7 @@ import { I_NFT } from "../../utils/interface";
 import axios from "axios";
 import { useTezosCollectStore } from "../../store";
 import InfiniteScroll from "react-infinite-scroll-component";
+import spinner from "../../assets/spinner.svg";
 interface propsType {
   setIsControl: React.Dispatch<React.SetStateAction<boolean>>;
   setOrderBy: React.Dispatch<React.SetStateAction<number>>;
@@ -62,9 +63,11 @@ const PrimaryFeed = () => {
   const [orderBy, setOrderBy] = useState<number>(profile.feedOrder);
   const [currentPage, setCurrentPage] = useState<number | null>(null);
   const [hasMoreItems, setHasMoreItems] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchItem = async () => {
+      setLoading(true);
       let _nftItems: I_NFT[] = []; 
       if(orderBy === 0) {
         _nftItems = await (await axios.get(
@@ -75,7 +78,6 @@ const PrimaryFeed = () => {
         _nftItems = await (await axios.get(
           `${API_ENDPOINT}/nfts/primary/${orderBy}/0/5/${activeAddress}`
         )).data;
-        console.log(_nftItems)
       }
 
       setNftItems(_nftItems);
@@ -85,6 +87,7 @@ const PrimaryFeed = () => {
       } else {
         setHasMoreItems(true);
       }
+      setLoading(false);
     };
     if (profileReady) {
       console.log("profileReady", profileReady);
@@ -136,11 +139,21 @@ const PrimaryFeed = () => {
           />
         )}
       </div>
+      {!loading ? 
       <InfiniteScroll
         dataLength={nftItems.length}
         next={fetchMoreData}
         hasMore={hasMoreItems}
-        loader={<h4>Loading...</h4>}
+        loader={
+        <>
+          <img
+            src={spinner}
+            alt="spinner"
+            className="inline mr-3 w-4 h-4 text-white animate-spin"
+          /> 
+          <h4>Loading...</h4>
+        </>
+      }
       >
         <div className="flex gap-36">
           <div className="flex flex-col w-1/2 gap-10">
@@ -169,6 +182,13 @@ const PrimaryFeed = () => {
           </div>
         </div>
       </InfiniteScroll>
+      :
+      <img
+        src={spinner}
+        alt="spinner"
+        className="inline mr-3 w-4 h-4 text-white animate-spin"
+      />
+      }
     </div>
   );
 };
