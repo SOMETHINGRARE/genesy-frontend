@@ -95,9 +95,16 @@ const PrimaryFeed = () => {
     if (profileReady) {
       console.log("profileReady", profileReady);
       setCurrentPage(currentPage! + 1);
-      const { data: _nftItems }: { data: I_NFT[] } = await axios.get(
-        `${API_ENDPOINT}/nfts/primary/${orderBy}/${currentPage! + 1}/5`
-      );
+      let _nftItems: I_NFT[] = []; 
+      if(orderBy === 0) {
+        _nftItems = (await axios.get(
+            `${API_ENDPOINT}/nfts/primary/${orderBy}/${currentPage! + 1}/5`
+          )).data;
+      } else {
+        _nftItems = (await axios.get(
+            `${API_ENDPOINT}/nfts/primary/${orderBy}/${currentPage! + 1}/5/${activeAddress}`
+          )).data;
+      }
       if (_nftItems.length == 0) {
         setHasMoreItems(false);
       }

@@ -46,7 +46,7 @@ const Profile = () => {
     // if (indexOf >= 0) profile.friends.splice(indexOf, 1);
     // else profile.friends.push(friend);
 
-    await toggleBookmark(wallet, friend);
+    toggleBookmark(wallet, friend);
   };
   useEffect(() => {
     if (_activeAddress?.address! !== address) {
