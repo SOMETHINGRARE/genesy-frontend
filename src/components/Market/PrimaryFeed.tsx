@@ -94,6 +94,7 @@ const PrimaryFeed = () => {
       fetchItem();
     }
   }, [orderBy, profileReady]);
+
   const fetchMoreData = async () => {
     if (profileReady) {
       console.log("profileReady", profileReady);
@@ -139,7 +140,7 @@ const PrimaryFeed = () => {
           />
         )}
       </div>
-      {!loading ? 
+      {!loading && nftItems.length ? 
       <InfiniteScroll
         dataLength={nftItems.length}
         next={fetchMoreData}
@@ -182,6 +183,12 @@ const PrimaryFeed = () => {
           </div>
         </div>
       </InfiniteScroll>
+      :
+      !loading && !nftItems.length ?
+      <div className="flex flex-col items-center space-y-4 py-16">
+        <span className="text-black">You have not flagged any users yet!</span>
+        <div className="text-black">Flag other users to build your “Under Radar” curated feed based on what other users have already collected.  </div>
+      </div>
       :
       <img
         src={spinner}

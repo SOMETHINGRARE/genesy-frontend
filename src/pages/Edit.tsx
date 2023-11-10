@@ -156,7 +156,7 @@ const Edit = () => {
             value={twitter}
             // onChange={(e) => setTwitter(e.target.value)}
             className="outline-none border-b border-black text-xs"
-            placeholder="Authorize with Twitter account from TzProfiles"
+            placeholder="Click on Twitter Icon Below to verify you account with Tzprofile"
             disabled 
           />
         </div>
