@@ -28,7 +28,7 @@ const Mint = () => {
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
 
-  function cropImage(image: HTMLImageElement, targetWidth: number, targetHeight: number): string {
+  function resizeImage(image: HTMLImageElement, targetWidth: number): string {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
@@ -36,48 +36,36 @@ const Mint = () => {
         throw new Error('Canvas 2D context is not available.');
     }
 
-    // Calculate the aspect ratio of the target dimensions
-    const targetAspectRatio = targetWidth / targetHeight;
-
-    // Calculate the aspect ratio of the original image
     const aspectRatio = image.width / image.height;
 
-    let newWidth;
-    let newHeight;
+    // Calculate the new height based on the target width and the aspect ratio
+    const newHeight = targetWidth / aspectRatio;
 
-    // Calculate new dimensions based on the aspect ratio
-    if (aspectRatio > targetAspectRatio) {
-        newWidth = image.height * targetAspectRatio;
-        newHeight = image.height;
-    } else {
-        newWidth = image.width;
-        newHeight = image.width / targetAspectRatio;
-    }
-
-    // Calculate the center point of the original image
-    const centerX = image.width / 2;
-    const centerY = image.height / 2;
-
-    // Calculate the starting point for cropping
-    const cropX = centerX - newWidth / 2;
-    const cropY = centerY - newHeight / 2;
-
-    // Set the canvas dimensions to the target size
+    // Set the canvas dimensions to the new size
     canvas.width = targetWidth;
-    canvas.height = targetHeight;
-    console.log(canvas)
+    canvas.height = newHeight;
+
     // Fill the canvas with a white background
     ctx.fillStyle = 'white'; // You can change 'white' to any desired background color
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the cropped image on the canvas
-    ctx.drawImage(image, cropX, cropY, newWidth, newHeight, 0, 0, targetWidth, targetHeight);
+    // Calculate the horizontal and vertical centering
+    const x = 0; // No need for horizontal centering
+    const y = 0; // No need for vertical centering
+
+    // Draw the image on the canvas with the new dimensions and centered on the white background
+    ctx.drawImage(image, x, y, targetWidth, newHeight);
 
     // Get the resized image data as a base64 string
-    const croppedImageData = canvas.toDataURL('image/jpeg');
-    
-    return croppedImageData;
+    const thumbnailWidth = canvas.width;
+    const thumbnailHeight = canvas.height;
+    console.log(thumbnailWidth, thumbnailHeight);
+
+    return canvas.toDataURL('image/jpeg');
 }
+
+  
+  
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -98,7 +86,7 @@ const Mint = () => {
         const image = new Image();
         image.src = base64image;
         image.onload = async () => {
-          const thumbnailBase64 = cropImage(image, 400, 400);
+          const thumbnailBase64 = resizeImage(image, 400);
   
           // Create a thumbnail file to be used as the thumbnailUri
           const thumbnailFile = new File([thumbnailBase64], `thumbnail.jpg`, { type: file!.type });
@@ -168,18 +156,18 @@ const Mint = () => {
   
     const reader = new FileReader();
     reader.onload = async function (event) {
-      // setBase64image(event.target!.result!.toString());
-      const base64image = event.target!.result!.toString();
+      setBase64image(event.target!.result!.toString());
+      // const base64image = event.target!.result!.toString();
   
-      // Create a new image element
-      const image = new Image();
+      // // Create a new image element
+      // const image = new Image();
       
-      image.onload = async () => {
-        const resizedBase64 = cropImage(image, 400, 400);
-        setBase64image(resizedBase64);
-      };
+      // image.onload = async () => {
+      //   const resizedBase64 = resizeImage(image, 400);
+      //   setBase64image(resizedBase64);
+      // };
   
-      image.src = base64image;
+      // image.src = base64image;
     };
   
     reader.readAsDataURL(file);
