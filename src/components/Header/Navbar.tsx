@@ -20,7 +20,7 @@ const Navbar = () => {
             pathname: "/earn",
           }}
         >
-          <div className="font-special mr-[30px] hover:opacity-50 cursor-pointer">
+          <div className="font-special mr-[30px] text-[12px] hover:opacity-50 cursor-pointer">
             EARN<br></br>KEYS
           </div>
         </LinkWithSearchParams>
