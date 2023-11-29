@@ -1,4 +1,4 @@
-import keyLogo from "../assets/key_icon.svg";
+import keyLogo from "../assets/key_icon_black.jpg";
 import code from "../assets/code.png";
 import Frame from "../assets/Frame.png";
 import React, { useState } from 'react';
