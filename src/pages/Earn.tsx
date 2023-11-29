@@ -41,7 +41,7 @@ const Earn = () => {
         />
         </div>
         <div className="font-semibold text-[30px]">EARN KEYS</div>
-        <div className="text-[50px]">THE GAME HAS BEGUN</div>
+        <div className="text-[65px]">THE GAME HAS BEGUN</div>
         <div>
             <img height="80" width="160" src={code} alt="KEYS token logo"></img>
         </div>
