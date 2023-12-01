@@ -1,4 +1,4 @@
-import keyLogo from "../assets/key_icon_black.jpg";
+import keyLogo from "../assets/key_icon.png";
 import code from "../assets/code.png";
 import Frame from "../assets/Frame.png";
 import React, { useState } from 'react';
@@ -15,7 +15,7 @@ const Earn = () => {
         setIsHovered(false);
     };
     return (
-      <div className="relative font-special pb-[80px] flex flex-col justify-between items-center h-screen bg-black text-white">
+      <div className="relative font-special pb-[100px] flex flex-col justify-between items-center h-screen bg-black text-white">
         <LinkWithSearchParams
                 to={{
                   pathname: "/",
