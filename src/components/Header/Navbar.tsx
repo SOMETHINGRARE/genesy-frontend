@@ -21,7 +21,9 @@ const Navbar = () => {
           }}
         >
           <div className="font-special text-left mr-[30px] text-[12px] hover:opacity-50 cursor-pointer">
-            EARN<br></br>UNIT
+            <span>EARN</span>
+            <br></br>
+            <span className="text-[14px]">UNIT</span>
           </div>
         </LinkWithSearchParams>
           
