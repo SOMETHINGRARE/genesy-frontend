@@ -15,7 +15,7 @@ const Earn = () => {
         setIsHovered(false);
     };
     return (
-      <div className="relative font-special pb-[100px] flex flex-col justify-between items-center h-screen bg-black text-white">
+      <div className="relative font-special pb-[120px] flex flex-col justify-between items-center h-screen bg-black text-white">
         <LinkWithSearchParams
                 to={{
                   pathname: "/",
@@ -34,18 +34,18 @@ const Earn = () => {
         
         <div className="">
         <img
-          height="160"
-          width="160"
+          height="80"
+          width="80"
           src={keyLogo}
           alt="KEYS token logo"
         />
         </div>
-        <div className="font-semibold text-[30px]">EARN UNI</div>
+        <div className="font-semibold text-[30px]">EARN UNIT</div>
         <div className="mt-[60px] text-[65px]">THE GAME HAS BEGUN</div>
         <div className="mt-[60px]">
             <img height="80" width="160" src={code} alt="KEYS token logo"></img>
         </div>
-        <div className="mt-[80px] font-semibold text-[20px]">**EACH ARTWORK YOU COLLECT GET 10% OF THE VALUE IN KEYS</div>
+        <div className="mt-[80px] font-semibold text-[20px]">**EACH ARTWORK YOU COLLECT GET 10% OF THE VALUE IN UNIT</div>
       </div>
     );
   };
