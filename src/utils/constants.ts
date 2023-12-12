@@ -89,9 +89,9 @@ export const NFT_CONTRACT_ADDRESS = NFT_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 
 export const TOKEN_CONTRACT_ADDRESS = TOKEN_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 
-export const API_ENDPOINT =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:80"
-    : "https://api.somethingrare.xyz";
+// export const API_ENDPOINT =
+//   process.env.NODE_ENV === "development"
+//     ? "http://localhost:80"
+//     : "https://api.somethingrare.xyz";
 
-// export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";
+export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";
