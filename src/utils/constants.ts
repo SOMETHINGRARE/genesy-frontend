@@ -33,7 +33,7 @@ export const TEZOS_COLLECT_WALLET = new BeaconWallet({
 });
 
 const MARKETPLACE_ADDRESSES = {
-  ghostnet: "KT1GHZGXy15DcqBYJKi3xu3X5KiHmjH4Py23",
+  ghostnet: "KT1NoQx1risQWgaFjKwSoei6bcrYNH5e4TLZ",
   kathmandunet: "",
   mainnet: "",
   mondaynet: "",
@@ -49,7 +49,7 @@ const MARKETPLACE_ADDRESSES = {
 };
 
 const NFT_ADDRESSES = {
-  ghostnet: "KT1GQukuGjr9bk3kC5R1vJkofwLFti7NK5Pm",
+  ghostnet: "KT18cqtfxocYRLjk7QLioodVHXNmMYLVHEfW",
   kathmandunet: "",
   mainnet: "",
   mondaynet: "",
@@ -64,6 +64,22 @@ const NFT_ADDRESSES = {
   custom: "",
 };
 
+const TOKEN_ADDRESSES = {
+  ghostnet: "KT1NmECCf7Pv4qkSPJ1RqRyfEPYfENswLN7e",
+  kathmandunet: "",
+  mainnet: "",
+  mondaynet: "",
+  dailynet: "",
+  delphinet: "",
+  edonet: "",
+  florencenet: "",
+  granadanet: "",
+  hangzhounet: "",
+  ithacanet: "",
+  jakartanet: "",
+  custom: "",
+}
+
 export const VAULT_ADDRESS = "tz1cVm8jzr5MN6oH21p54HuWCi69qYzjo7MN";
 
 export const MARKETPLACE_CONTRACT_ADDRESS =
@@ -71,9 +87,11 @@ export const MARKETPLACE_CONTRACT_ADDRESS =
 
 export const NFT_CONTRACT_ADDRESS = NFT_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 
-// export const API_ENDPOINT =
-//   process.env.NODE_ENV === "development"
-//     ? "http://localhost:80"
-//     : "https://api.somethingrare.xyz";
+export const TOKEN_CONTRACT_ADDRESS = TOKEN_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 
-export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";
+export const API_ENDPOINT =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:80"
+    : "https://api.somethingrare.xyz";
+
+// export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";

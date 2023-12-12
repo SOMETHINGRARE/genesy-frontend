@@ -23,7 +23,7 @@ const Navbar = () => {
           <div className="font-special text-left mr-[30px] text-[12px] hover:opacity-50 cursor-pointer">
             <span>EARN</span>
             <br></br>
-            <span className="text-[14px]">UNIT</span>
+            <span className="text-[13px]">UNIT</span>
           </div>
         </LinkWithSearchParams>
           
