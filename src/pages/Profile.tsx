@@ -7,17 +7,20 @@ import { useTezosCollectStore } from "../store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useParams } from "react-router-dom";
+import { getUnitBalance } from "../utils/price";
+import keyLogo from "../assets/unit_logo_black.png";
 
 const Profile = () => {
   const [isBookmark, setIsBookmark] = useState<boolean>(false);
   const [profile, setProfile] = useState<I_PROFILE | null>(null);
   const [wallet, setWallet] = useState<I_PROFILE | null>(null);
+  const [unitBalance, setUnitBalance] = useState<number>(0);
   const [tabLength, setTabLength] = useState<number>(0);
   const { address } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [guest, setGuest] = useState<boolean>(true);
   const [showTooltip, setShowTooltip] = useState(false);
-
+  const [showBalance, setShowBalance] = useState(false);
   const { fetchProfile, activeAddress, toggleBookmark } =
     useTezosCollectStore();
   const _activeAddress = JSON.parse(
@@ -75,6 +78,8 @@ const Profile = () => {
       let user = await fetchProfile(address!);
       console.log("user", user);
       let walletData = await fetchProfile(_activeAddress?.address!);
+      let unitBalance = await getUnitBalance(_activeAddress?.address!) || 0;
+      setUnitBalance(unitBalance)
       setProfile(user);
       setWallet(walletData);
       if (user?.artist) {
@@ -128,13 +133,31 @@ const Profile = () => {
     </div>
   ) : (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
-      <a href={profile?.twitter} target="_blank" rel="noreferrer">
-      <BsTwitter className="mb-4"/>
-      </a>
+      <div className="flex">
+        <a href={profile?.twitter} target="_blank" rel="noreferrer">
+          <BsTwitter className="mb-4"/>
+        </a>
+        <img
+          className="mb-4 ml-4 cursor-pointer"
+          height="25"
+          width="25"
+          src={keyLogo}
+          alt="KEYS token logo"
+          onMouseEnter={() => setShowBalance(true)}
+          onMouseLeave={() => setShowBalance(false)}
+        />
+        <div className="flex items-center justify-center p-1 bg-slate-400 font-semibold text-xs relative bottom-7"
+            style={{ display: showBalance ? "flex" : "none" }}
+        >
+          UNIT: {unitBalance / 1e6}
+        </div>
+      </div>
+      
       <div className="flex justify-between">
         <div className="mb-6">
           <div className="text-2xl font-bold">{profile?.username}</div>
           <div className="pt-2">{profile?.description}</div>
+          
         </div>
         {_activeAddress?.address !== address && (
           <div className="flex"> 
