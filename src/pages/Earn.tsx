@@ -41,8 +41,8 @@ const Earn = () => {
         />
         </div>
         <div className="mt-[15px] font-semibold text-[30px]">EARN UNIT</div>
-        <div className="mt-[60px] text-[65px]">THE GAME HAS BEGUN</div>
-        <div className="mt-[60px]">
+        <div className="mt-[30px] text-[65px]">THE GAME HAS BEGUN</div>
+        <div className="mt-[30px]">
             <img height="80" width="160" src={code} alt="KEYS token logo"></img>
         </div>
         <div className="mt-[80px] font-semibold text-[20px]">**EACH ARTWORK YOU COLLECT GET 10% OF THE VALUE IN UNIT</div>
