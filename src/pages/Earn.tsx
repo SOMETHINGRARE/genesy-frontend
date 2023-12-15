@@ -15,7 +15,7 @@ const Earn = () => {
         setIsHovered(false);
     };
     return (
-      <div className="relative font-special pb-[100px] flex flex-col justify-between items-center h-screen bg-black text-white">
+      <div className="relative font-special pt-[50px] pb-[100px] flex flex-col justify-between items-center h-screen bg-black text-white">
         <LinkWithSearchParams
                 to={{
                   pathname: "/",
