@@ -24,7 +24,7 @@ const PeersBoard = ({ peers }: any) => {
               }}
               className="flex items-center gap-4 my-2"
             >
-              <img src={item?.avatarLink} alt="avatar" className="w-8 h-8" />
+              <img src={item?.avatarLink} alt="avatar" className="w-6 h-6" />
               <div className="text-ellipsis">{item?.username}</div>
             </LinkWithSearchParams>
           </div>
@@ -54,6 +54,7 @@ const Asset = () => {
     artist: "",
     description: "",
     imageLink: "",
+    thumbnailLink: "",
     name: "",
     owner: "",
   });
@@ -200,10 +201,12 @@ const Asset = () => {
         `${API_ENDPOINT}/nfts/${tokenId}`
       );
       console.log("_nftItems", _nftItems);
-      let peer = await axios.get(
-        `${API_ENDPOINT}/nfts/peers/${_nftItems?.artist}/${activeAddress}`
-      );
-      setPeers(peer.data);
+      if(activeAddress) {
+        let peer = await axios.get(
+          `${API_ENDPOINT}/nfts/peers/${_nftItems?.artist}/${activeAddress}`
+        );
+        setPeers(peer.data);
+      }
       let res = await axios.get(`${API_ENDPOINT}/nfts/log/${tokenId}`);
       setLogs(res.data?.reverse());
       let _price = await getTezosPrice();
@@ -262,22 +265,24 @@ const Asset = () => {
     </div>
   ) : (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
-      <div className="flex gap-24">
-        <img src={nftItem.imageLink} alt="test" className="w-1/2" />
+      <div className="flex gap-24 max-h-[545px]">
+        <div className="max-h-full w-1/2">
+          <img src={nftItem.imageLink} alt="test" className="max-h-full w-full h-auto" />
+        </div>
         <div className="w-1/2 flex flex-col gap-4 justify-between">
-          <div className="text-3xl font-normal">{nftItem.name}</div>
-          <div>
+          <div className="text-4xl font-semibold">{nftItem.name}</div>
+          <div className="mt-16">
             <div className="flex gap-2">
               <div className="border-b-2 border-black w-5"></div>
-              <div>CREATED BY</div>
+              <div className="text-xs text-gray-400">CREATED BY</div>
             </div>
-            <div className="flex gap-2 items-center my-4">
+            <div className="flex gap-2 items-center my-4 mb-2">
               <img
                 src={nftItem.artistObj?.avatarLink}
                 alt="user"
                 className="w-6 h-6"
               />
-              <div className="font-normal">
+              <div className="text-xl font-semibold">
                 <LinkWithSearchParams
                   to={{
                     pathname: `/profile/${nftItem?.artistObj?.wallet}`,
@@ -288,11 +293,10 @@ const Asset = () => {
                 </LinkWithSearchParams>
               </div>
             </div>
-          </div>
-          {peers?.length! > 0 && (
             <div className="relative">
-              <div>Collector's Circle</div>
-              <div className="flex gap-2  my-4 items-center  hover:cursor-pointer">
+            <div className="text-sm">Friends Supporters</div>
+            {peers?.length! > 0 && (
+              <div className="flex gap-2 mt-2 my-4 items-center hover:cursor-pointer">
                 {peers?.slice(0, 3)?.map((item: any, index: any) => (
                   <div key={index}>
                     <LinkWithSearchParams
@@ -300,30 +304,29 @@ const Asset = () => {
                         pathname: `/profile/${item?.wallet}`,
                       }}
                     >
-                      <img
-                        src={item?.avatarLink}
-                        alt="avartar"
-                        className="w-8 h-8"
-                      />
+                      <img src={item?.avatarLink} alt="avatar" className="w-6 h-6" />
                     </LinkWithSearchParams>
                   </div>
                 ))}
                 {peers?.length! > 3 && (
-                  <div
-                    className="font-normal text-2xl "
-                    onClick={() => setIsPeers(!isPeers)}
-                  >
+                  <div className="font-semibold text-2xl " onClick={() => setIsPeers(!isPeers)}>
                     + {peers?.length! - 3} others
                   </div>
                 )}
               </div>
-              {isPeers && <PeersBoard peers={peers} />}
-            </div>
-          )}
+            )}
+            {isPeers && <PeersBoard peers={peers} />}
+          </div>
+            {(!peers || !peers?.length) && (
+              <div className="relative min-w-0 min-h-[60px]">
+              </div>
+            )}
+          </div>
+          
           <div>
             <div className="flex gap-2">
               <div className="border-b-2 border-black w-5"></div>
-              <div>COLLECTED BY</div>
+              <div className="text-xs text-gray-400">COLLECTED BY</div>
             </div>
             <div className="flex gap-2 items-center  my-4">
               <img
@@ -336,7 +339,7 @@ const Asset = () => {
                   to={{
                     pathname: `/profile/${nftItem?.ownerObj?.wallet}`,
                   }}
-                  className="text-xl"
+                  className="text-xl font-semibold"
                 >
                   {nftItem.ownerObj?.username}
                 </LinkWithSearchParams>
@@ -387,12 +390,12 @@ const Asset = () => {
                 </div>
               </div>
             ) : (
-              <div>
+              <div className="mt-[40px]">
                 <div>
                   <div>
                     <div className="flex gap-2">
                       <div className="border-b-2 border-black w-5"></div>
-                      <div>PRICE</div>
+                      <div className="text-xs text-gray-400">PRICE</div>
                     </div>
                     <div className="flex gap-2 items-center  my-4">
                       <div className="">
@@ -425,18 +428,18 @@ const Asset = () => {
               </div>
             )
           ) : nftItem.price === 0 ? (
-            <></>
+            <div className="min-w-0 min-h-[120px]"></div>
           ) : (
-            <div>
+            <div className="mt-[40px]">
               <div>
                 <div className="flex gap-2">
                   <div className="border-b-2 border-black w-5"></div>
-                  <div>PRICE</div>
+                  <div className="text-xs text-gray-400">PRICE</div>
                 </div>
 
                 <div className="flex gap-2 items-center  my-4">
                   <div className="">
-                    <span className="text-2xl font-bold">
+                    <span className="text-xl font-semibold">
                       {nftItem.price} XTZ
                     </span>
                     {/* USD {String(price).slice(0, 5)} */}
@@ -454,18 +457,18 @@ const Asset = () => {
         </div>
       </div>
       <div>
-        <div className="flex gap-2 text-2xl font-normal py-8">
+        <div className="flex gap-2 text-2xl font-normal py-8 pb-4">
           <div className="border-b-2 border-black w-5"></div>
-          <div>Description</div>
+          <div className="text-[24px] font-semibold">Description</div>
         </div>
-        <div className="py-4">{nftItem.description}</div>
+        <div className="py-4 text-[15px]">{nftItem.description}</div>
         <div className="flex gap-4 py-2">
-          <div>ROYALTIES</div>
-          <div>{nftItem?.royalty}%</div>
+          <div className="text-xs text-gray-400">ROYALTIES</div>
+          <div className="text-xs">{nftItem?.royalty}%</div>
         </div>
         <div className="flex gap-4 py-2">
-          <div>ADDRESS</div>
-          <div>{NFT_CONTRACT_ADDRESS}</div>
+          <div className="text-xs text-gray-400">ADDRESS</div>
+          <div className="text-xs">{NFT_CONTRACT_ADDRESS}</div>
         </div>
         <div className="flex gap-4 font-bold py-4">
           <div className="flex items-center gap-4">
@@ -474,6 +477,7 @@ const Asset = () => {
               href={`https://ghostnet.tzkt.io/${NFT_CONTRACT_ADDRESS}/operations/`}
               target="_blank"
               rel="noopener noreferrer"
+              className="text-xs"
             >
               TzKT
             </a>
@@ -484,6 +488,7 @@ const Asset = () => {
               href={nftItem.imageLink}
               target="_blank"
               rel="noopener noreferrer"
+              className="text-xs"
             >
               IPFS
             </a>
@@ -493,33 +498,36 @@ const Asset = () => {
       <div>
         <div className="flex gap-2 text-2xl font-normal py-8">
           <div className="border-b-2 border-black w-5"></div>
-          <div>History</div>
+          <div className="text-[20px] font-semibold">History</div>
         </div>
         <div className="flex flex-col gap-4">
-          {logs?.map((item, index) => (
-            <div key={index} className="flex gap-8">
-              <div>{dateFormat(item?.timestamp)}</div>
-              <div className="flex gap-2">
-                {item.content?.map((content, index) => (
-                  <div key={index}>
-                    {content.link.length > 0 ? (
-                      <LinkWithSearchParams
-                        to={{
-                          pathname: `/profile/${content?.link}`,
-                        }}
-                        className="font-bold"
-                      >
-                        {content?.text}
-                      </LinkWithSearchParams>
-                    ) : (
-                      <span>{content?.text}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+  {logs?.map((item, index) => (
+    <div key={index} className="grid grid-cols-5 gap-8">
+      <div className="text-xs text-gray-400" style={{ gridColumn: "span 1" }}>{dateFormat(item?.timestamp)}</div>
+      <div className="flex gap-2" style={{ gridColumn: "span 4" }}>
+        {item.content?.map((content, index) => (
+          <div key={index} className="text-xs">
+            {content.link.length > 0 ? (
+              <LinkWithSearchParams
+                to={{
+                  pathname: `/profile/${content?.link}`,
+                }}
+                className="font-bold"
+              >
+                {content?.text}
+              </LinkWithSearchParams>
+            ) : (
+              <span className={content?.text.includes("XTZ") ? "font-semibold" : ""}>
+                {content?.text}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
       </div>
     </div>
   );

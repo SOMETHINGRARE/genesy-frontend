@@ -13,6 +13,7 @@ interface I_NFT {
   name: string;
   description: string;
   imageLink: string;
+  thumbnailLink: string;
   artist: string;
   artistObj?: I_USER;
   owner: string;

@@ -7,15 +7,20 @@ import { useTezosCollectStore } from "../store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useParams } from "react-router-dom";
+import { getUnitBalance } from "../utils/price";
+import keyLogo from "../assets/unit_logo_black.png";
 
 const Profile = () => {
   const [isBookmark, setIsBookmark] = useState<boolean>(false);
   const [profile, setProfile] = useState<I_PROFILE | null>(null);
   const [wallet, setWallet] = useState<I_PROFILE | null>(null);
+  const [unitBalance, setUnitBalance] = useState<number>(0);
   const [tabLength, setTabLength] = useState<number>(0);
   const { address } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [guest, setGuest] = useState<boolean>(true);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [showBalance, setShowBalance] = useState(false);
   const { fetchProfile, activeAddress, toggleBookmark } =
     useTezosCollectStore();
   const _activeAddress = JSON.parse(
@@ -44,7 +49,7 @@ const Profile = () => {
     // if (indexOf >= 0) profile.friends.splice(indexOf, 1);
     // else profile.friends.push(friend);
 
-    await toggleBookmark(wallet, friend);
+    toggleBookmark(wallet, friend);
   };
   useEffect(() => {
     if (_activeAddress?.address! !== address) {
@@ -65,7 +70,7 @@ const Profile = () => {
       }
     };
     fetchBookmark();
-  }, [isBookmark]);
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -73,13 +78,16 @@ const Profile = () => {
       let user = await fetchProfile(address!);
       console.log("user", user);
       let walletData = await fetchProfile(_activeAddress?.address!);
+      let unitBalance = await getUnitBalance(_activeAddress?.address!) || 0;
+      setUnitBalance(unitBalance)
       setProfile(user);
       setWallet(walletData);
       if (user?.artist) {
         setTabLength(1);
         if (
           _activeAddress?.address == "tz1VL5AfvZ3Cz6Bd2c2agcUQe7HKxje7ojNu" ||
-          _activeAddress?.address == "tz1MNjp6JCY68XqCkPU1quEwh67LCT3LkHwP"
+          _activeAddress?.address == "tz1MNjp6JCY68XqCkPU1quEwh67LCT3LkHwP" ||
+          _activeAddress?.address == "tz1cVm8jzr5MN6oH21p54HuWCi69qYzjo7MN"
         ) {
           setTabLength(0);
         }
@@ -125,23 +133,39 @@ const Profile = () => {
     </div>
   ) : (
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
+      <div className="flex">
+        <a href={profile?.twitter} target="_blank" rel="noreferrer">
+          <BsTwitter className="mb-4"/>
+        </a>
+        <img
+          className="mb-4 ml-4 cursor-pointer"
+          height="25"
+          width="25"
+          src={keyLogo}
+          alt="KEYS token logo"
+          onMouseEnter={() => setShowBalance(true)}
+          onMouseLeave={() => setShowBalance(false)}
+        />
+        <div className="flex items-center justify-center p-1 bg-slate-400 font-semibold text-xs relative bottom-7"
+            style={{ display: showBalance ? "flex" : "none" }}
+        >
+          UNIT: {unitBalance / 1e6}
+        </div>
+      </div>
+      
       <div className="flex justify-between">
         <div className="mb-6">
           <div className="text-2xl font-bold">{profile?.username}</div>
           <div className="pt-2">{profile?.description}</div>
-          <a
-            href={profile?.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cursor-pointer underline"
-          >
-            {profile?.twitter}
-          </a>
+          
         </div>
         {_activeAddress?.address !== address && (
+          <div className="flex"> 
           <div
             onClick={() => toggleMark(_activeAddress?.address!, address!)}
             className=" w-10 h-10 rounded-full hover:bg-gray-100 flex justify-center items-center"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
           >
             {isBookmark ? (
               <BsBookmarkFill className="font-bold" />
@@ -149,7 +173,18 @@ const Profile = () => {
               <BsBookmark className="font-bold" />
             )}
           </div>
+            {showTooltip && (
+            <div className="tooltip">
+              <div id="tooltip-default" role="tooltip" className="absolute text-[12px] bg-gray-200 w-40 p-2">
+                Use Flags to build your 'Under Radar' filter
+                <div className="tooltip-arrow" data-popper-arrow></div>
+              </div>
+            </div>
+          )}
+          </div>
+          
         )}
+        
       </div>
       {guest && (
         <div className="flex gap-4 pb-8">

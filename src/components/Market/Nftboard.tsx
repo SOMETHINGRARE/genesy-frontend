@@ -2,6 +2,7 @@ import CollectCard from "./CollectCard";
 import { useTezosCollectStore } from "../../store";
 import LinkWithSearchParams from "../LinkWithSearchParams";
 const Nftboard = ({ items }: any) => {
+  const ratio = "1";
   const { findProfileById } = useTezosCollectStore();
   return (
     <div>
@@ -13,7 +14,7 @@ const Nftboard = ({ items }: any) => {
                 pathname: `/assets/${item.tokenId}`,
               }}
             >
-              <CollectCard nft={item} profile={findProfileById(item.artist)} />
+              <CollectCard nft={item} profile={findProfileById(item.artist)} ratio={ratio} />
             </LinkWithSearchParams>
           </div>
         ))}

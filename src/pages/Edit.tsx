@@ -6,10 +6,13 @@ import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 import { useTezosCollectStore } from "../store";
+import { BsBookmark, BsTwitter } from "react-icons/bs";
+import { MdVerified } from "react-icons/md";
+import { PROFILES_API_URL, PROFILES_URL } from "../utils/constants"
 
 const Edit = () => {
   const navigate = useNavigate();
-  const orderType = ["Chronological", "Curated"];
+  const orderType = ["Chronological", `Curate your own page with Flags`];
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [twitter, setTwitter] = useState<string>("");
@@ -19,6 +22,8 @@ const Edit = () => {
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [imageObject, setImageObject] = useState<File | null>(null);
+  const [isTwitterLoading, setIsTwitterLoading] = useState(false);
+
   const handleChange = (i: number) => {
     setFeed(i);
   };
@@ -37,6 +42,27 @@ const Edit = () => {
       }
     })();
   }, []);
+
+  async function getTwitter(activeAddress: string) {
+    setIsTwitterLoading(true);
+
+    try {
+      const metadata = await axios.get(`${PROFILES_API_URL}${activeAddress}`)
+      console.log(metadata)
+      if (metadata.data && Array.isArray(metadata.data) && metadata.data.length > 0) {
+        const jsonData = JSON.parse(metadata.data[0][1]);
+        const twitterHandle = jsonData.credentialSubject.sameAs;
+        setTwitter(twitterHandle);
+      } else {
+        // Redirect the user to https://tzprofiles.com/
+        window.open(`${PROFILES_URL}`, "_blank");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsTwitterLoading(false);
+    }
+  }
 
   const updateProfile = async () => {
     if (imageObject) {
@@ -71,7 +97,7 @@ const Edit = () => {
           description: description,
           feedOrder: feed,
           avatarLink: profile,
-          twitter: twitter,
+          twitter: twitter || "",
         };
         let res = await axios.put(
           `${API_ENDPOINT}/profiles/${activeAddress}`,
@@ -94,40 +120,48 @@ const Edit = () => {
         <div className="text-3xl">Edit Profile</div>
 
         <div className="flex flex-col py-4">
-          <div>USERNAME*</div>
+          <div className="text-sm py-2">USERNAME*</div>
           <input
             type="text"
             name="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Choose the username that will appear on your profile"
           />
         </div>
         <div className="flex flex-col py-4">
-          <div>DESCRIPTION*</div>
+          <div className="text-sm py-2">DESCRIPTION*</div>
           <input
             type="text"
             name="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="outline-none border-b border-black"
+            className="outline-none border-b border-black text-xs"
             placeholder="Write a few words about who you are"
           />
         </div>
         <div className="flex flex-col py-4">
-          <div>TWITTER ACCOUNT*</div>
+          <div className="text-sm py-2 flex items-center">
+            TWITTER ACCOUNT*
+            {twitter ? (
+              <MdVerified style={{ color: 'blue' }} className="ml-[10px]" />
+            ) : (
+              <span className="text-xs">(Please verify your account)</span>
+            )}
+          </div>
           <input
             type="text"
             name="twitter"
             value={twitter}
-            onChange={(e) => setTwitter(e.target.value)}
-            className="outline-none border-b border-black"
-            placeholder="Write your Twitter username"
+            // onChange={(e) => setTwitter(e.target.value)}
+            className="outline-none border-b border-black text-xs"
+            placeholder="Click on Twitter Icon Below to verify you account with Tzprofile"
+            disabled 
           />
         </div>
         <div className="py-4">
-          <div>FEED ORDER*</div>
+          <div className="text-sm py-2">FEED ORDER*</div>
           <div>
             {orderType.map((item, i) => (
               <div key={i}>
@@ -139,23 +173,45 @@ const Edit = () => {
                   checked={feed === i}
                   onChange={() => handleChange(i)}
                 />
-                <label htmlFor={item} className="pl-1">
-                  {item}
+                <label htmlFor={item} className={`pl-1 ${i === 1 ? "inline-block" : ""}`}>
+                  {i === 1 ? (
+                    <span className="flex items-center">
+                      {item}
+                      <BsBookmark className="ml-[5px] font-bold" />
+                    </span>
+                  ) : (
+                    item
+                  )}
                 </label>
               </div>
             ))}
           </div>
         </div>
+        <div className="flex">
+          <div className="flex flex-col py-4 gap-2 pr-16">
+            <div className="text-sm py-2">UPLOAD IMAGE</div>
+            <div className="flex">
+              <ImageDropZone
+                imageObject={imageObject}
+                setImageObject={setImageObject}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col py-4 gap-2">
+            <div className="text-sm py-2">TWITTER ACCOUNT</div>
+            <div className="flex">
 
-        <div className="flex flex-col py-4 gap-2">
-          <div>UPLOAD IMAGE</div>
-          <div className="flex">
-            <ImageDropZone
-              imageObject={imageObject}
-              setImageObject={setImageObject}
-            />
+              <button className="hover:bg-sky-400/50 border border-black text-3xl flex items-center justify-center p-8"
+             onClick={(event) => getTwitter(activeAddress)}
+            >
+              <BsTwitter className="hover:opacity-70"/>
+            </button>
+        
+            
+            </div>
           </div>
         </div>
+        
         <button
           className="py-2 bg-black text-white w-32  my-4 hover:bg-gray-600"
           onClick={() => updateProfile()}
@@ -168,6 +224,15 @@ const Edit = () => {
                 className="inline mr-3 w-4 h-4 text-white animate-spin"
               />
               UPDATING...
+            </div>
+          ) : isTwitterLoading ? (
+            <div className="flex items-center justify-center">
+              <img
+                src={spinner}
+                alt="spinner"
+                className="inline mr-3 w-4 h-4 text-white animate-spin"
+              />
+              FETCHING...
             </div>
           ) : (
             <div>UPDATE</div>

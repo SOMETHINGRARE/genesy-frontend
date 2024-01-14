@@ -1,12 +1,42 @@
-import { NFTStorage } from "nft.storage";
-import { type } from "os";
-import { NFT_STORAGE_KEY } from "./constants";
-export const pinToIpfs = async (file: File): Promise<string> => {
-  // create a new NFTStorage client using our API key
-  const nftstorage = new NFTStorage({ token: NFT_STORAGE_KEY });
+import axios from "axios";
 
-  // call client.store, passing in the image & metadata
-  return await nftstorage.storeBlob(file);
+export const pinMetadataToIpfs = async (metadata: any): Promise<any> => {
+  const form = new FormData();
+  form.append('name', metadata.name);
+  form.append('description', metadata.description);
+  form.append('files', metadata.image); 
+  form.append('symbol', metadata.symbol);
+  form.append('decimals', metadata.decimals);
+  form.append('shouldPreferSymbol', metadata.shouldPreferSymbol);
+  form.append('isBooleanAmount', metadata.isBooleanAmount);
+  form.append('istransferable', metadata.istransferable);
+  form.append('files', metadata.artifactUri); 
+  form.append('files', metadata.displayUri); 
+  form.append('files', metadata.thumbnailUri); 
+  form.append('creators', metadata.creators);
+
+  const res = await axios.post(
+    "https://upload.somethingrare.xyz/metadata",
+    form,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+  return res.data;
+};
+
+export const pinToIpfs = async (file: File): Promise<string> => {
+  const form = new FormData();
+  form.append('asset', file);
+
+  const res = await axios.post(
+    "https://upload.somethingrare.xyz/object",
+    form,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+  return res.data.cid;
 };
 
 export const replaceIpfsLink = (ipfsLink: string) => {

@@ -1,13 +1,12 @@
 import { BsImage } from "react-icons/bs";
 import { useState, ChangeEvent, useEffect } from "react";
-import { NFT_STORAGE_KEY } from "../utils/constants";
 import { NFTStorage, File } from "nft.storage";
 import { useTezosCollectStore } from "../store";
 import spinner from "../assets/spinner.svg";
 import axios from "axios";
 import { API_ENDPOINT } from "../utils/constants";
 import { I_NFT, I_Log, I_PROFILE } from "../utils/interface";
-import { replaceIpfsLink } from "../utils/utils";
+import { replaceIpfsLink, pinMetadataToIpfs } from "../utils/utils";
 import { useNavigate } from "react-router-dom";
 
 const Mint = () => {
@@ -19,7 +18,6 @@ const Mint = () => {
     updateLastTokenId,
     fetchProfile,
   } = useTezosCollectStore();
-  const client = new NFTStorage({ token: NFT_STORAGE_KEY });
   const [profile, setProfile] = useState<I_PROFILE | null>(null);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -29,6 +27,46 @@ const Mint = () => {
   const [error, setError] = useState<string>("");
   const [base64image, setBase64image] = useState("");
   const [isLoad, setIsLoad] = useState<boolean>(false);
+
+  function resizeImage(image: HTMLImageElement, targetWidth: number): string {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+        throw new Error('Canvas 2D context is not available.');
+    }
+
+    const aspectRatio = image.width / image.height;
+
+    // Calculate the new height based on the target width and the aspect ratio
+    const newHeight = targetWidth / aspectRatio;
+
+    // Set the canvas dimensions to the new size
+    canvas.width = targetWidth;
+    canvas.height = newHeight;
+
+    // Fill the canvas with a white background
+    ctx.fillStyle = 'white'; // You can change 'white' to any desired background color
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Calculate the horizontal and vertical centering
+    const x = 0; // No need for horizontal centering
+    const y = 0; // No need for vertical centering
+
+    // Draw the image on the canvas with the new dimensions and centered on the white background
+    ctx.drawImage(image, x, y, targetWidth, newHeight);
+
+    // Get the resized image data as a base64 string
+    const thumbnailWidth = canvas.width;
+    const thumbnailHeight = canvas.height;
+    console.log(thumbnailWidth, thumbnailHeight);
+
+    return canvas.toDataURL('image/jpeg');
+}
+
+  
+  
+
   const onSubmit = (e: any) => {
     e.preventDefault();
     if (
@@ -45,51 +83,66 @@ const Mint = () => {
     setIsLoad(true);
     (async () => {
       try {
-        const metadata = await client.store({
-          name: name,
-          description: description,
-          image: new File([file!], file!.name, { type: file!.type }),
-          symbol: "GENESY",
-          decimals: 0,
-          shouldPreferSymbol: false,
-          isBooleanAmount: true,
-          istransferable: true,
-          artifactUri: new File([file!], file!.name, { type: file!.type }),
-          displayUri: new File([file!], file!.name, { type: file!.type }),
-          thumbnailUri: new File([file!], file!.name, { type: file!.type }),
-          creators: ["genesy"],
-        });
-        let payload: I_NFT = {
-          name: name,
-          description: description,
-          imageLink: replaceIpfsLink(metadata.data.image.href),
-          artist: activeAddress,
-          owner: activeAddress,
-          price: amount,
-          royalty: parseFloat(royalties),
-          mintedAt: new Date(),
+        const image = new Image();
+        image.src = base64image;
+        image.onload = async () => {
+          const thumbnailBase64 = resizeImage(image, 400);
+  
+          // Create a thumbnail file to be used as the thumbnailUri
+          const thumbnailFile = new File([thumbnailBase64], `thumbnail.jpg`, { type: file!.type });
+          
+          const metadata = await pinMetadataToIpfs({
+            name: name,
+            description: description,
+            image: new File([file!], file!.name, { type: file!.type }),
+            symbol: "GENESY",
+            decimals: 0,
+            shouldPreferSymbol: false,
+            isBooleanAmount: true,
+            istransferable: true,
+            artifactUri: new File([file!], file!.name, { type: file!.type }),
+            displayUri: new File([file!], file!.name, { type: file!.type }),
+            thumbnailUri: thumbnailFile, 
+            // thumbnailUri: new File([file!], file!.name, { type: file!.type }), 
+            creators: ["genesy"],
+          });
+          console.log(metadata.data)
+          let payload: I_NFT = {
+            name: name,
+            description: description,
+            imageLink: replaceIpfsLink(metadata.data.image),
+            thumbnailLink: replaceIpfsLink(metadata.data.thumbnailUri),
+            artist: activeAddress,
+            owner: activeAddress,
+            price: amount,
+            royalty: parseFloat(royalties),
+            mintedAt: new Date(),
+          };
+  
+          let logs: I_Log = {
+            timestamp: new Date(),
+            content: [
+              {
+                text: `${profile?.username}`,
+                link: `${profile?.wallet}`,
+              },
+              {
+                text: "minted",
+                link: "",
+              },
+            ],
+          };
+  
+          let test = await nftMint(parseInt(royalties), metadata.metadata);
+          await Promise.all([
+            axios.put(`${API_ENDPOINT}/nfts/${lastTokenId}`, payload),
+            axios.post(`${API_ENDPOINT}/nfts/log/${lastTokenId}`, logs),
+            updateLastTokenId(),
+          ]);
+  
+          setIsLoad(false);
+          navigate(`/profile/${activeAddress}/owned`);
         };
-        let logs: I_Log = {
-          timestamp: new Date(),
-          content: [
-            {
-              text: `${profile?.username}`,
-              link: `${profile?.wallet}`,
-            },
-            {
-              text: "minted",
-              link: "",
-            },
-          ],
-        };
-        let test = await nftMint(parseInt(royalties), metadata);
-        await Promise.all([
-          axios.put(`${API_ENDPOINT}/nfts/${lastTokenId}`, payload),
-          axios.post(`${API_ENDPOINT}/nfts/log/${lastTokenId}`, logs),
-          updateLastTokenId(),
-        ]);
-        setIsLoad(false);
-        navigate(`/profile/${activeAddress}/owned`);
       } catch (error) {
         console.log(error);
         setIsLoad(false);
@@ -100,12 +153,26 @@ const Mint = () => {
   async function onChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files![0];
     setFile(file);
+  
     const reader = new FileReader();
-    reader.onload = function (event) {
+    reader.onload = async function (event) {
       setBase64image(event.target!.result!.toString());
+      // const base64image = event.target!.result!.toString();
+  
+      // // Create a new image element
+      // const image = new Image();
+      
+      // image.onload = async () => {
+      //   const resizedBase64 = resizeImage(image, 400);
+      //   setBase64image(resizedBase64);
+      // };
+  
+      // image.src = base64image;
     };
+  
     reader.readAsDataURL(file);
   }
+  
   useEffect(() => {
     const fetchData = async () => {
       let res = await fetchProfile(activeAddress);
@@ -117,14 +184,14 @@ const Mint = () => {
     <div className="max-w-[1024px] mx-auto py-24 sm:px-8 lg:px-0">
       <div className="text-3xl font-medium">Mint a new piece of art</div>
       <div className="flex flex-col py-4 gap-2 relative">
-        <div>TITLE*</div>
+        <div className="text-sm py-2">TITLE*</div>
         <input
           type="text"
           name="name"
           value={name}
           disabled={isLoad}
           onChange={(e) => setName(e.target.value)}
-          className="outline-none border-b border-black"
+          className="outline-none border-b border-black text-xs"
           placeholder="Title of your art piece"
         />
         {name.length > 30 ? (
@@ -134,13 +201,13 @@ const Mint = () => {
         ) : null}
       </div>
       <div className="flex flex-col py-4 gap-2 relative">
-        <div>DESCRIPTION*</div>
+        <div className="text-sm py-2">DESCRIPTION*</div>
         <textarea
           name="name"
           value={description}
           disabled={isLoad}
           onChange={(e) => setDescription(e.target.value)}
-          className="outline-none border-b border-black"
+          className="outline-none border-b border-black text-xs"
           placeholder="Add a detailed description about this piece of art."
         />
         {description.length > 300 ? (
@@ -150,31 +217,31 @@ const Mint = () => {
         ) : null}
       </div>
       <div className="flex flex-col py-4 gap-2 relative">
-        <div>ROYALTIES*</div>
+        <div className="text-sm py-2">ROYALTIES*</div>
         <input
           type="text"
           name="name"
           value={royalties}
           disabled={isLoad}
           onChange={(e) => setRoyalties(e.target.value)}
-          className="outline-none border-b border-black"
+          className="outline-none border-b border-black text-xs"
           placeholder="You can set a value between 0 and 15%"
         />
         {parseInt(royalties) > 10 && (
-          <div className="text-red-700 text-sm top-20 absolute">
+          <div className="text-red-700 text-xs top-20 absolute">
             As common practice, please enter a value between 0 and 10%!
           </div>
         )}
       </div>
 
       <div className="flex flex-col py-4 gap-2">
-        <div>UPLOAD ART</div>
+        <div className="text-sm py-2">UPLOAD ART</div>
         <div className="flex">
           <label htmlFor="asset" className="">
             {base64image ? (
               <img
                 className="rounded mt-4"
-                width="350"
+                // width="350"
                 src={base64image}
                 alt="preview"
               />
@@ -193,6 +260,7 @@ const Mint = () => {
             onChange={onChange}
           />
         </div>
+      {/* <div className="text-xs font-semibold">** Currently we are supporting square image ratio like 200x200 - 300x300 - 500x500</div> */}
       </div>
       <div className="relative">
         <button

@@ -15,17 +15,17 @@ const SeconddaryFeed = () => {
   return (
     <div className="">
       <div className="">
-        <div className="text-2xl font-bold py-8">__ Recent sales</div>
+        <div className="text-[22px] font-semibold py-8">_ Recent sales</div>
         <Nftboard items={nftItems?.recentSales!} />
       </div>
 
       <div className="">
-        <div className="text-2xl font-bold py-8">__ Top prices (7days)</div>
+        <div className="text-[22px] font-semibold py-8">_ Top prices (7days)</div>
         <Nftboard items={nftItems?.topPrice!} />
       </div>
 
       <div className="">
-        <div className="text-2xl font-bold py-8">__ Best artists</div>
+        <div className="text-[22px] font-semibold py-8">_ Best artists</div>
         <Artistboard items={nftItems?.bestArtists!} />
       </div>
     </div>

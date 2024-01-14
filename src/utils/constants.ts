@@ -16,22 +16,24 @@ export const TEZOS_COLLECT_NETWORK: Network = {
 const MAINNET_RPC_URL: string = "https://mainnet.api.tez.ie";
 const GHOSTNET_RPC_URL: string = "https://rpc.tzkt.io/ghostnet";
 
+export const PROFILES_API_URL : string = "https://api.tzprofiles.com/";
+export const PROFILES_URL : string = "https://tzprofiles.com/";
+
 const TEZOS_COLLECT_RPC_URL =
   TEZOS_COLLECT_NETWORK.type === NetworkType.GHOSTNET
     ? GHOSTNET_RPC_URL
     : MAINNET_RPC_URL;
 export const Tezos = new TezosToolkit(TEZOS_COLLECT_RPC_URL);
-export const NFT_STORAGE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDIxM2MwOGZEQjVCMDNGQWRkYzVEYWE1ODk5ZkY4NjY5YWE2ZGZBRDAiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MDUwODU3OTgwNCwibmFtZSI6IkdlbmVzeSJ9.ZTjxdK3K9Rr14USOXMCcrOkvBCuyVi6MKlI7Uhv4ufg";
+
 // Create a new DAppClient instance
 export const TEZOS_COLLECT_WALLET = new BeaconWallet({
-  name: "Genesy",
+  name: "SomethingRare",
   preferredNetwork: TEZOS_COLLECT_NETWORK.type,
   colorMode: ColorMode.LIGHT,
 });
 
 const MARKETPLACE_ADDRESSES = {
-  ghostnet: "KT1BBrdaSwGScGcVnbMuqn3xhAmEmo5Z5q6X",
+  ghostnet: "KT1NoQx1risQWgaFjKwSoei6bcrYNH5e4TLZ",
   kathmandunet: "",
   mainnet: "",
   mondaynet: "",
@@ -47,7 +49,7 @@ const MARKETPLACE_ADDRESSES = {
 };
 
 const NFT_ADDRESSES = {
-  ghostnet: "KT18yToJwQVHvdc4NKFji1Zdc8p5tD9LyckV",
+  ghostnet: "KT18cqtfxocYRLjk7QLioodVHXNmMYLVHEfW",
   kathmandunet: "",
   mainnet: "",
   mondaynet: "",
@@ -62,16 +64,34 @@ const NFT_ADDRESSES = {
   custom: "",
 };
 
-export const VAULT_ADDRESS = "tz1VL5AfvZ3Cz6Bd2c2agcUQe7HKxje7ojNu";
+const TOKEN_ADDRESSES = {
+  ghostnet: "KT1NmECCf7Pv4qkSPJ1RqRyfEPYfENswLN7e",
+  kathmandunet: "",
+  mainnet: "",
+  mondaynet: "",
+  dailynet: "",
+  delphinet: "",
+  edonet: "",
+  florencenet: "",
+  granadanet: "",
+  hangzhounet: "",
+  ithacanet: "",
+  jakartanet: "",
+  custom: "",
+}
+
+export const VAULT_ADDRESS = "tz1cVm8jzr5MN6oH21p54HuWCi69qYzjo7MN";
 
 export const MARKETPLACE_CONTRACT_ADDRESS =
   MARKETPLACE_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 
 export const NFT_CONTRACT_ADDRESS = NFT_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
 
+export const TOKEN_CONTRACT_ADDRESS = TOKEN_ADDRESSES[TEZOS_COLLECT_NETWORK.type];
+
 // export const API_ENDPOINT =
 //   process.env.NODE_ENV === "development"
-//     ? "http://192.168.113.103:80"
-//     : "https://api.genesy.xyz";
+//     ? "http://localhost:80"
+//     : "https://api.somethingrare.xyz";
 
-export const API_ENDPOINT = "https://api.genesy.xyz";
+export const API_ENDPOINT = "https://api-staging.somethingrare.xyz";

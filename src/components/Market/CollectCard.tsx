@@ -6,9 +6,10 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 type ICollectProps = {
   nft?: I_NFT;
   profile?: I_PROFILE;
+  ratio?: string;
 };
-const CollectCard = ({ nft, profile }: ICollectProps) => {
-  console.log("nft", nft);
+const CollectCard = ({ nft, profile, ratio }: ICollectProps) => {
+  // console.log("nft", nft);
   return (
     <div className="flex flex-col py-4 cursor-pointer w-full">
       <LinkWithSearchParams
@@ -22,14 +23,14 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
             alt="avatar"
             className="w-6 h-6"
           />
-          <div className="font-bold">{profile?.username}</div>
+          <div className="font-semibold">{profile?.username}</div>
         </div>
       </LinkWithSearchParams>
       <div className="flex text-sm w-full">
         <div className="itemNft">
           <div className="flex justify-between  my-3 gap-4">
-            <div className="truncate">{nft?.name}</div>
-            <div className="truncate">
+            <div className="text-xs truncate">{nft?.name}</div>
+            <div className="text-xs truncate">
               {dateDifFromNow(
                 (nft?.lastSoldAmount == 0 ? nft?.mintedAt : nft?.lastSoldAt) ||
                   new Date()
@@ -43,15 +44,17 @@ const CollectCard = ({ nft, profile }: ICollectProps) => {
             className="w-full"
           >
             <LazyLoadImage
-              src={nft?.imageLink}
+              // src={nft?.imageLink}
+              src={nft?.thumbnailLink}
               alt="test"
-              className="primary-nft w-full"
+              className="collect-card w-[400px] h-auto w-full"
+              style={{ aspectRatio: ratio }}
             />
           </LinkWithSearchParams>
         </div>
-        <div className="nft-price text-end flex justify-end">
+        <div className="ml-1 nft-price text-end flex justify-end">
           <div className="border-l h-8 border-black ml-[7px] mb-2" />
-          <div>
+          <div className="text-xs">
             {nft?.lastSoldAmount == 0 ? nft?.price : nft?.lastSoldAmount} TZ
           </div>
         </div>
