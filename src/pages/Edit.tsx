@@ -97,7 +97,7 @@ const Edit = () => {
           description: description,
           feedOrder: feed,
           avatarLink: profile,
-          twitter: twitter,
+          twitter: twitter || "",
         };
         let res = await axios.put(
           `${API_ENDPOINT}/profiles/${activeAddress}`,

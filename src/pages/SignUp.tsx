@@ -39,7 +39,7 @@ const SignUp = () => {
 
   // Function to check if all required fields are completed
   const checkCompletion = () => {
-    return name && description && twitter && imageObject;
+    return name && description && imageObject;
   };
 
   async function getTwitter(activeAddress: string) {
